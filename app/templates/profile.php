@@ -35,7 +35,13 @@ $postCount = count($userPosts);
     <!-- En-tête profil -->
     <div class="profile-header animate-in">
         <div class="profile-top">
-            <div class="profile-avatar"><?= getInitials($profile['display_name']) ?></div>
+            <div class="profile-avatar">
+                <?php if (!empty($profile['avatar_url'])): ?>
+                    <img src="<?= e($profile['avatar_url']) ?>" alt="<?= e($profile['display_name']) ?>" class="avatar-img">
+                <?php else: ?>
+                    <?= getInitials($profile['display_name']) ?>
+                <?php endif; ?>
+            </div>
             <div class="profile-info">
                 <h1>
                     <?= e($profile['display_name']) ?>
@@ -108,7 +114,13 @@ $postCount = count($userPosts);
     <?php foreach ($userPosts as $post): ?>
         <div class="post-card animate-in">
             <div class="post-header">
-                <div class="post-avatar"><?= getInitials($profile['display_name']) ?></div>
+                <div class="post-avatar">
+                    <?php if (!empty($profile['avatar_url'])): ?>
+                        <img src="<?= e($profile['avatar_url']) ?>" alt="" class="avatar-img">
+                    <?php else: ?>
+                        <?= getInitials($profile['display_name']) ?>
+                    <?php endif; ?>
+                </div>
                 <div class="post-meta">
                     <div class="post-author"><?= e($profile['display_name']) ?></div>
                     <div class="post-time"><?= timeAgo($post['created_at']) ?> · <?= e($post['visibility']) ?></div>

@@ -6,7 +6,7 @@ $currentUser = getCurrentUser();
 
 // Récupérer les posts
 $posts = $db->query("
-    SELECT p.*, u.display_name, u.role, u.username, u.department
+    SELECT p.*, u.display_name, u.role, u.username, u.department, u.avatar_url
     FROM posts p
     JOIN users u ON p.user_id = u.id
     WHERE p.visibility IN ('public', 'members')
@@ -49,7 +49,13 @@ unset($_SESSION['flash_message']);
             <?php foreach ($posts as $post): ?>
                 <div class="post-card animate-in">
                     <div class="post-header">
-                        <a href="/profile/<?= $post['user_id'] ?>" class="post-avatar"><?= getInitials($post['display_name']) ?></a>
+                        <a href="/profile/<?= $post['user_id'] ?>" class="post-avatar">
+                            <?php if (!empty($post['avatar_url'])): ?>
+                                <img src="<?= e($post['avatar_url']) ?>" alt="<?= e($post['display_name']) ?>" class="avatar-img">
+                            <?php else: ?>
+                                <?= getInitials($post['display_name']) ?>
+                            <?php endif; ?>
+                        </a>
                         <div class="post-meta">
                             <div class="post-author">
                                 <a href="/profile/<?= $post['user_id'] ?>"><?= e($post['display_name']) ?></a>
@@ -98,7 +104,13 @@ unset($_SESSION['flash_message']);
             <div class="sidebar-widget">
                 <h3>Mon profil</h3>
                 <div class="member-list-item">
-                    <div class="member-list-avatar" style="width: 48px; height: 48px; font-size: 1rem;"><?= getInitials($currentUser['display_name']) ?></div>
+                    <div class="member-list-avatar" style="width: 48px; height: 48px; font-size: 1rem;">
+                        <?php if (!empty($currentUser['avatar_url'])): ?>
+                            <img src="<?= e($currentUser['avatar_url']) ?>" alt="" class="avatar-img">
+                        <?php else: ?>
+                            <?= getInitials($currentUser['display_name']) ?>
+                        <?php endif; ?>
+                    </div>
                     <div>
                         <div class="member-list-name" style="font-size: 1rem;"><?= e($currentUser['display_name']) ?></div>
                         <div class="member-list-role"><?= e($currentUser['department'] ?? $currentUser['role']) ?></div>
@@ -117,11 +129,17 @@ unset($_SESSION['flash_message']);
             <div class="sidebar-widget">
                 <h3>Membres en ligne</h3>
                 <?php
-                    $onlineMembers = $db->query("SELECT * FROM users WHERE status = 'actif' ORDER BY last_login DESC LIMIT 5")->fetchAll();
+                    $onlineMembers = $db->query("SELECT id, display_name, role, avatar_url FROM users WHERE status = 'actif' ORDER BY last_login DESC LIMIT 5")->fetchAll();
                     foreach ($onlineMembers as $m):
                 ?>
                     <a href="/profile/<?= $m['id'] ?>" class="member-list-item" style="text-decoration: none;">
-                        <div class="member-list-avatar"><?= getInitials($m['display_name']) ?></div>
+                        <div class="member-list-avatar">
+                            <?php if (!empty($m['avatar_url'])): ?>
+                                <img src="<?= e($m['avatar_url']) ?>" alt="" class="avatar-img">
+                            <?php else: ?>
+                                <?= getInitials($m['display_name']) ?>
+                            <?php endif; ?>
+                        </div>
                         <div>
                             <div class="member-list-name"><?= e($m['display_name']) ?></div>
                             <div class="member-list-role"><?= e($m['role']) ?></div>

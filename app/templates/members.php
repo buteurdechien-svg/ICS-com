@@ -15,7 +15,11 @@ $members = $db->query("SELECT * FROM users WHERE status = 'actif' ORDER BY FIELD
             <a href="/profile/<?= $member['id'] ?>" class="card animate-in" style="text-decoration: none; color: inherit;">
                 <div class="flex flex-center gap-md">
                     <div class="post-avatar" style="width: 56px; height: 56px; font-size: 1.125rem;">
-                        <?= getInitials($member['display_name']) ?>
+                        <?php if (!empty($member['avatar_url'])): ?>
+                            <img src="<?= e($member['avatar_url']) ?>" alt="<?= e($member['display_name']) ?>" class="avatar-img">
+                        <?php else: ?>
+                            <?= getInitials($member['display_name']) ?>
+                        <?php endif; ?>
                     </div>
                     <div>
                         <div style="font-weight: 600;"><?= e($member['display_name']) ?></div>

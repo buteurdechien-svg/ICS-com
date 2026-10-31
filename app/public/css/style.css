@@ -156,6 +156,11 @@ img {
   justify-content: center;
   font-size: 1rem;
 }
+.nav-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
 .nav-links {
   display: flex;
   align-items: center;
@@ -191,6 +196,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   font-family: var(--font-heading);
   font-weight: 600;
   font-size: 0.875rem;
@@ -503,6 +509,13 @@ img {
   font-weight: 600;
   color: var(--text-on-accent);
   flex-shrink: 0;
+  overflow: hidden;
+}
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-full);
 }
 .post-meta {
   flex: 1;
@@ -601,6 +614,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 2rem;
@@ -850,6 +864,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-on-accent);

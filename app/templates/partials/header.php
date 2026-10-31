@@ -17,7 +17,7 @@
 <nav class="nav">
     <div class="nav-inner">
         <a href="/" class="nav-brand">
-            <span class="shield-icon">🛡</span>
+            <img src="/img/logo-ics.png" alt="ICS" class="nav-logo">
             ICS Community
         </a>
 
@@ -42,7 +42,11 @@
                     <a href="/admin" class="btn btn-sm btn-secondary">Admin</a>
                 <?php endif; ?>
                 <a href="/profile" class="nav-avatar" title="<?= e($currentUser['display_name']) ?>">
-                    <?= getInitials($currentUser['display_name']) ?>
+                    <?php if (!empty($currentUser['avatar_url'])): ?>
+                        <img src="<?= e($currentUser['avatar_url']) ?>" alt="<?= e($currentUser['display_name']) ?>" class="avatar-img">
+                    <?php else: ?>
+                        <?= getInitials($currentUser['display_name']) ?>
+                    <?php endif; ?>
                 </a>
                 <a href="/logout" class="btn btn-sm btn-secondary">Déconnexion</a>
             <?php else: ?>

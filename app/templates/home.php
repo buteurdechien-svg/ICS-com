@@ -8,7 +8,7 @@ $postCount = $db->query("SELECT COUNT(*) FROM posts")->fetchColumn();
 $donationTotal = $db->query("SELECT setting_value FROM donation_settings WHERE setting_key = 'total_collected'")->fetchColumn();
 
 // Derniers posts publics
-$recentPosts = $db->query("SELECT p.*, u.display_name, u.role, u.username FROM posts p JOIN users u ON p.user_id = u.id WHERE p.visibility = 'public' ORDER BY p.created_at DESC LIMIT 5")->fetchAll();
+$recentPosts = $db->query("SELECT p.*, u.display_name, u.role, u.username, u.avatar_url FROM posts p JOIN users u ON p.user_id = u.id WHERE p.visibility = 'public' ORDER BY p.created_at DESC LIMIT 5")->fetchAll();
 
 // Dernières news
 $recentNews = $db->query("SELECT * FROM cyber_news ORDER BY published_at DESC LIMIT 3")->fetchAll();
@@ -55,7 +55,13 @@ $recentNews = $db->query("SELECT * FROM cyber_news ORDER BY published_at DESC LI
             <?php foreach ($recentPosts as $post): ?>
                 <div class="post-card animate-in">
                     <div class="post-header">
-                        <div class="post-avatar"><?= getInitials($post['display_name']) ?></div>
+                        <div class="post-avatar">
+                            <?php if (!empty($post['avatar_url'])): ?>
+                                <img src="<?= e($post['avatar_url']) ?>" alt="" class="avatar-img">
+                            <?php else: ?>
+                                <?= getInitials($post['display_name']) ?>
+                            <?php endif; ?>
+                        </div>
                         <div class="post-meta">
                             <div class="post-author">
                                 <a href="/profile/<?= $post['user_id'] ?>"><?= e($post['display_name']) ?></a>
@@ -111,7 +117,13 @@ $recentNews = $db->query("SELECT * FROM cyber_news ORDER BY published_at DESC LI
                     foreach ($leaders as $leader):
                 ?>
                     <a href="/profile/<?= $leader['id'] ?>" class="member-list-item" style="text-decoration: none;">
-                        <div class="member-list-avatar"><?= getInitials($leader['display_name']) ?></div>
+                        <div class="member-list-avatar">
+                            <?php if (!empty($leader['avatar_url'])): ?>
+                                <img src="<?= e($leader['avatar_url']) ?>" alt="" class="avatar-img">
+                            <?php else: ?>
+                                <?= getInitials($leader['display_name']) ?>
+                            <?php endif; ?>
+                        </div>
                         <div>
                             <div class="member-list-name"><?= e($leader['display_name']) ?></div>
                             <div class="member-list-role"><?= e($leader['department'] ?? $leader['role']) ?></div>

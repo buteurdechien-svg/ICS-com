@@ -6,7 +6,7 @@ $userId = getCurrentUserId();
 
 // Liste des conversations
 $conversations = $db->prepare("
-    SELECT u.id, u.display_name, u.role,
+    SELECT u.id, u.display_name, u.role, u.avatar_url,
            (SELECT content FROM messages WHERE (sender_id = ? AND receiver_id = u.id) OR (sender_id = u.id AND receiver_id = ?) ORDER BY created_at DESC LIMIT 1) as last_message,
            (SELECT created_at FROM messages WHERE (sender_id = ? AND receiver_id = u.id) OR (sender_id = u.id AND receiver_id = ?) ORDER BY created_at DESC LIMIT 1) as last_time,
            (SELECT COUNT(*) FROM messages WHERE sender_id = u.id AND receiver_id = ? AND is_read = 0) as unread
@@ -57,7 +57,13 @@ if ($activeChat) {
         <div class="messages-sidebar">
             <?php foreach ($convos as $convo): ?>
                 <a href="/messages?to=<?= $convo['id'] ?>" class="messages-contact <?= $activeChat == $convo['id'] ? 'active' : '' ?>" style="text-decoration: none; color: inherit;">
-                    <div class="member-list-avatar"><?= getInitials($convo['display_name']) ?></div>
+                    <div class="member-list-avatar">
+                        <?php if (!empty($convo['avatar_url'])): ?>
+                            <img src="<?= e($convo['avatar_url']) ?>" alt="" class="avatar-img">
+                        <?php else: ?>
+                            <?= getInitials($convo['display_name']) ?>
+                        <?php endif; ?>
+                    </div>
                     <div style="flex: 1; min-width: 0;">
                         <div class="flex flex-between flex-center">
                             <div class="member-list-name"><?= e($convo['display_name']) ?></div>
@@ -83,7 +89,13 @@ if ($activeChat) {
             <?php if ($chatUser): ?>
                 <div class="messages-chat-header">
                     <div class="flex flex-center gap-sm">
-                        <div class="member-list-avatar"><?= getInitials($chatUser['display_name']) ?></div>
+                        <div class="member-list-avatar">
+                            <?php if (!empty($chatUser['avatar_url'])): ?>
+                                <img src="<?= e($chatUser['avatar_url']) ?>" alt="" class="avatar-img">
+                            <?php else: ?>
+                                <?= getInitials($chatUser['display_name']) ?>
+                            <?php endif; ?>
+                        </div>
                         <?= e($chatUser['display_name']) ?>
                         <span class="post-badge badge-<?= $chatUser['role'] ?>"><?= $chatUser['role'] ?></span>
                     </div>

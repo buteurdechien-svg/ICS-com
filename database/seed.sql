@@ -10,43 +10,43 @@ SET NAMES utf8mb4;
 -- 12 Membres ICS (mots de passe : "Password123!" pour tous)
 -- Hash bcrypt de "Password123!"
 -- ============================================================
-INSERT INTO users (username, email, password_hash, display_name, role, status, department, bio, city, is_admin, created_at, activated_at) VALUES
+INSERT INTO users (username, email, password_hash, display_name, role, status, department, bio, city, is_admin, avatar_url, created_at, activated_at) VALUES
 
 -- Président
-('thesocvolkoff', 'volkoff@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'The SOC Volkoff', 'president', 'actif', 'Présidence', 'Président fondateur d''Ivoire Cyber Shield. Passionné de cybersécurité offensive et défensive. Formateur certifié CEH, OSCP.', 'Abidjan', 1, '2025-01-15 08:00:00', '2025-01-15 08:00:30'),
+('thesocvolkoff', 'volkoff@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'The SOC Volkoff', 'president', 'actif', 'Présidence', 'Président fondateur d''Ivoire Cyber Shield. Passionné de cybersécurité offensive et défensive. Formateur certifié CEH, OSCP.', 'Abidjan', 1, '/img/members/thesocvolkoff.jpg', '2025-01-15 08:00:00', '2025-01-15 08:00:30'),
 
 -- Vice-Président
-('massambacyberhack', 'massamba@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'Massamba CyberHack', 'administrateur', 'actif', 'Vice-Présidence', 'Vice-Président ICS. Expert en analyse forensique et réponse aux incidents. Spécialiste SOC/SIEM.', 'Abidjan', 1, '2025-01-16 09:00:00', '2025-01-16 09:00:30'),
+('massambacyberhack', 'massamba@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'Massamba CyberHack', 'administrateur', 'actif', 'Vice-Présidence', 'Vice-Président ICS. Expert en analyse forensique et réponse aux incidents. Spécialiste SOC/SIEM.', 'Abidjan', 1, '/img/members/massambacyberhack.jpg', '2025-01-16 09:00:00', '2025-01-16 09:00:30'),
 
 -- Responsable Partenariat
-('camson', 'camson@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'CAMSON', 'moderateur', 'actif', 'Partenariat', 'Responsable du département Partenariat. Développement des relations avec les entreprises et institutions.', 'Abidjan', 0, '2025-02-01 10:00:00', '2025-02-01 10:00:30'),
+('camson', 'camson@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'CAMSON', 'moderateur', 'actif', 'Partenariat', 'Responsable du département Partenariat. Développement des relations avec les entreprises et institutions.', 'Abidjan', 0, '/img/members/camson.jpg', '2025-02-01 10:00:00', '2025-02-01 10:00:30'),
 
 -- Responsable Technique
-('mrshadow', 'shadow@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'MR SHADOW', 'moderateur', 'actif', 'Technique', 'Responsable Technique ICS. Pentester, développeur d''outils de sécurité. Bug bounty hunter.', 'Abidjan', 0, '2025-02-05 11:00:00', '2025-02-05 11:00:30'),
+('mrshadow', 'shadow@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'MR SHADOW', 'moderateur', 'actif', 'Technique', 'Responsable Technique ICS. Pentester, développeur d''outils de sécurité. Bug bounty hunter.', 'Abidjan', 0, '/img/members/mrshadow.jpg', '2025-02-05 11:00:00', '2025-02-05 11:00:30'),
 
 -- Responsable Formation
-('legoatdeshacker', 'goat@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'LE GOAT DES HACKER', 'moderateur', 'actif', 'Formation', 'Responsable Formation. Créateur de CTF et laboratoires pratiques. Mentor pour les débutants.', 'Abidjan', 0, '2025-02-10 08:30:00', '2025-02-10 08:30:30'),
+('legoatdeshacker', 'goat@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'LE GOAT DES HACKER', 'moderateur', 'actif', 'Formation', 'Responsable Formation. Créateur de CTF et laboratoires pratiques. Mentor pour les débutants.', 'Abidjan', 0, '/img/members/legoatdeshacker.jpg', '2025-02-10 08:30:00', '2025-02-10 08:30:30'),
 
 -- Gestionnaire budget
-('victoriait', 'victoria@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'VICTORIA IT', 'moderateur', 'actif', 'Budget & Finances', 'Gestion du portefeuille et du budget ICS. Transparence et traçabilité des fonds.', 'Abidjan', 0, '2025-02-15 09:00:00', '2025-02-15 09:00:30'),
+('victoriait', 'victoria@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'VICTORIA IT', 'moderateur', 'actif', 'Budget & Finances', 'Gestion du portefeuille et du budget ICS. Transparence et traçabilité des fonds.', 'Abidjan', 0, '/img/members/victoriait.jpg', '2025-02-15 09:00:00', '2025-02-15 09:00:30'),
 
 -- Formateur
-('hassancamara', 'hassan@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'HASSAN CAMARA', 'membre', 'actif', 'Formation', 'Formateur en sécurité réseau et administration système. Passionné de Linux et infrastructure.', 'Bouaké', 0, '2025-03-01 10:00:00', '2025-03-01 10:00:30'),
+('hassancamara', 'hassan@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'HASSAN CAMARA', 'membre', 'actif', 'Formation', 'Formateur en sécurité réseau et administration système. Passionné de Linux et infrastructure.', 'Bouaké', 0, '/img/members/hassancamara.jpg', '2025-03-01 10:00:00', '2025-03-01 10:00:30'),
 
 -- Département Partenariat
-('tehuayann', 'tehua@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'TEHUA YANN', 'membre', 'actif', 'Partenariat', 'Membre du département Partenariat. Relations publiques et événementiel cyber.', 'Yamoussoukro', 0, '2025-03-10 11:00:00', '2025-03-10 11:00:30'),
+('tehuayann', 'tehua@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'TEHUA YANN', 'membre', 'actif', 'Partenariat', 'Membre du département Partenariat. Relations publiques et événementiel cyber.', 'Yamoussoukro', 0, '/img/members/tehuayann.jpg', '2025-03-10 11:00:00', '2025-03-10 11:00:30'),
 
 -- Département Formation
-('hackerman', 'hackerman@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'HACKER MAN', 'membre', 'actif', 'Formation', 'Département Formation. Spécialiste en exploitation web et mobile. Contributeur CTF.', 'Abidjan', 0, '2025-03-15 14:00:00', '2025-03-15 14:00:30'),
+('hackerman', 'hackerman@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'HACKER MAN', 'membre', 'actif', 'Formation', 'Département Formation. Spécialiste en exploitation web et mobile. Contributeur CTF.', 'Abidjan', 0, '/img/members/hackerman.jpg', '2025-03-15 14:00:00', '2025-03-15 14:00:30'),
 
 -- Département Communication & Partenariat
-('ahizimarc', 'ahizi@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'AHIZI MARC YOANN', 'membre', 'actif', 'Communication & Partenariat', 'Communication et partenariat. Création de contenu, réseaux sociaux et relations presse.', 'Abidjan', 0, '2025-04-01 08:00:00', '2025-04-01 08:00:30'),
+('ahizimarc', 'ahizi@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'AHIZI MARC YOANN', 'membre', 'actif', 'Communication & Partenariat', 'Communication et partenariat. Création de contenu, réseaux sociaux et relations presse.', 'Abidjan', 0, '/img/members/ahizimarc.jpg', '2025-04-01 08:00:00', '2025-04-01 08:00:30'),
 
 -- Communication (ajouté par le client)
-('gnalyemmanuel', 'gnaly@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'GNALY Emmanuel', 'membre', 'actif', 'Communication', 'Département Communication. Stratégie de communication digitale et gestion de la communauté en ligne.', 'Abidjan', 0, '2025-04-10 09:00:00', '2025-04-10 09:00:30'),
+('gnalyemmanuel', 'gnaly@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'GNALY Emmanuel', 'membre', 'actif', 'Communication', 'Département Communication. Stratégie de communication digitale et gestion de la communauté en ligne.', 'Abidjan', 0, '/img/members/gnalyemmanuel.jpg', '2025-04-10 09:00:00', '2025-04-10 09:00:30'),
 
 -- Secrétariat (ajouté par le client)
-('dombamohamed', 'domba@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'DOMBA Mohamed', 'membre', 'actif', 'Secrétariat', 'Secrétariat ICS. Organisation, planification et gestion administrative de l''association.', 'Abidjan', 0, '2025-04-15 10:00:00', '2025-04-15 10:00:30');
+('dombamohamed', 'domba@ics-lab.ci', '$2y$10$LxVqEKpMzMVGfdANJRQy5eQK8jFqNzVZz8U1dMWjHR3Jn7sM6YXWK', 'DOMBA Mohamed', 'membre', 'actif', 'Secrétariat', 'Secrétariat ICS. Organisation, planification et gestion administrative de l''association.', 'Abidjan', 0, '/img/members/dombamohamed.jpg', '2025-04-15 10:00:00', '2025-04-15 10:00:30');
 
 
 -- ============================================================
