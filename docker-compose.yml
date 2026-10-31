@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ics-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/var/www/html
+      - uploads_data:/var/www/storage/uploads
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - APP_NAME=${APP_NAME}
+      - APP_URL=${APP_URL}
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - APP_SECRET=${APP_SECRET}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_FROM=${SMTP_FROM}
+      - UPLOAD_MAX_SIZE=${UPLOAD_MAX_SIZE}
+      - UPLOAD_DIR=${UPLOAD_DIR}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ics-net
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: ics-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    # Port MySQL NON exposé sur l'hôte (sécurité)
+    networks:
+      - ics-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: ics-mailpit
+    ports:
+      - "8025:8025"   # Interface web Mailpit
+    # Port SMTP 1025 interne uniquement
+    networks:
+      - ics-net
+    restart: unless-stopped
+
+  # Conteneur isolé — Simulation CVE PHP 2026
+  # Pas de montage hôte, pas de socket Docker, pas de données réelles
+  vuln-cve:
+    build:
+      context: ./cve-simulation
+      dockerfile: Dockerfile
+    container_name: ics-cve-lab
+    ports:
+      - "8081:80"
+    networks:
+      - ics-internal
+    # Pas d'accès au réseau principal ni à Internet
+    restart: unless-stopped
+
+networks:
+  ics-net:
+    driver: bridge
+  ics-internal:
+    driver: bridge
+    internal: true  # Pas d'accès Internet sortant
+
+volumes:
+  mysql_data:
+  uploads_data:

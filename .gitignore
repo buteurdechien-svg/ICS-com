@@ -1,0 +1,8 @@
+.env
+app/public/uploads/*
+!app/public/uploads/.gitkeep
+vendor/
+node_modules/
+*.log
+.DS_Store
+docker/mysql-data/
