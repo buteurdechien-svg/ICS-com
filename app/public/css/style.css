@@ -9,29 +9,37 @@
 /* --- Design Tokens --- */
 :root {
   /* ICS Brand Colors */
-  --bg-deep: #0d1117;
-  --bg-surface: #161b22;
-  --bg-card: #1c2128;
-  --bg-elevated: #21262d;
-  --bg-hover: #292e36;
-  --border-default: #30363d;
-  --border-muted: #21262d;
+  --bg-deep: #070b10;
+  --bg-surface: #0c131b;
+  --bg-card: #111a24;
+  --bg-elevated: #162231;
+  --bg-hover: #1c2b3c;
+  --border-default: #243447;
+  --border-muted: #162231;
 
-  --electric: #2f81f7;
-  --electric-dim: #1a4d8f;
-  --electric-glow: rgba(47, 129, 247, 0.15);
-  --iris: #8957e5;
-  --iris-dim: #553098;
-  --iris-glow: rgba(137, 87, 229, 0.15);
-  --signal: #da3633;
+  --electric: #1489d1;
+  --electric-dim: #005c93;
+  --electric-glow: rgba(20, 137, 209, 0.15);
+  --iris: #e75b1c;
+  --iris-dim: #b14d26;
+  --iris-glow: rgba(231, 91, 28, 0.15);
+  --signal: #d9362b;
   --signal-dim: #8b1a18;
   --phosphor: #3fb950;
   --phosphor-dim: #1a7f37;
   --amber: #d29922;
 
-  --text-primary: #e6edf3;
-  --text-secondary: #8b949e;
-  --text-muted: #6e7681;
+  --text-primary: #f0f0f0;
+  --text-secondary: #a3afbc;
+  --text-muted: #7d8b99;
+
+  /* Couleurs du logo Ivoire Cyber Shield (référence) :
+     bleu #005c93 / #004a71, orange #e75b1c / #c25224, noir, blanc #f0f0f0
+     --btn-* : teintes foncées pour garder un texte blanc lisible (contraste ≥ 4.5) */
+  --btn-blue: #0b74b3;
+  --btn-blue-hover: #09679f;
+  --btn-orange: #c94f1a;
+  --btn-orange-hover: #b44615;
   --text-on-accent: #ffffff;
 
   /* Typography */
@@ -59,8 +67,8 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-  --shadow-glow-electric: 0 0 20px rgba(47, 129, 247, 0.2);
-  --shadow-glow-iris: 0 0 20px rgba(137, 87, 229, 0.2);
+  --shadow-glow-electric: 0 0 20px rgba(20, 137, 209, 0.2);
+  --shadow-glow-iris: 0 0 20px rgba(231, 91, 28, 0.2);
 
   /* Transitions */
   --transition-fast: 150ms ease;
@@ -163,7 +171,7 @@ img {
   background: #f4f6f8;
   border-radius: 8px;
   padding: 3px 6px;
-  box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 0 18px rgba(47,129,247,.25);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 0 18px rgba(20,137,209,.25);
 }
 .nav-links {
   display: flex;
@@ -311,7 +319,7 @@ img {
   font-weight: 700;
   line-height: 1.15;
   margin-bottom: var(--space-lg);
-  background: linear-gradient(135deg, var(--text-primary) 0%, var(--electric) 50%, var(--iris) 100%);
+  background: linear-gradient(120deg, #ffffff 0%, #bfe3fa 30%, #3aa3e6 65%, #ffffff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -362,11 +370,11 @@ img {
   line-height: 1.5;
 }
 .btn-primary {
-  background: var(--electric);
+  background: var(--btn-blue);
   color: var(--text-on-accent);
 }
 .btn-primary:hover {
-  background: #4a9af5;
+  background: var(--btn-blue-hover);
   box-shadow: var(--shadow-glow-electric);
   color: var(--text-on-accent);
 }
@@ -380,11 +388,11 @@ img {
   border-color: var(--electric);
 }
 .btn-iris {
-  background: var(--iris);
+  background: var(--btn-orange);
   color: var(--text-on-accent);
 }
 .btn-iris:hover {
-  background: #9d6eec;
+  background: var(--btn-orange-hover);
   box-shadow: var(--shadow-glow-iris);
   color: var(--text-on-accent);
 }
@@ -468,7 +476,7 @@ img {
   color: var(--phosphor);
 }
 .alert-error {
-  background: rgba(218, 54, 51, 0.1);
+  background: rgba(217, 54, 43, 0.1);
   border-color: var(--signal-dim);
   color: var(--signal);
 }
@@ -547,23 +555,19 @@ img {
 }
 .badge-president {
   background: var(--iris-glow);
-  color: var(--iris);
-  border: 1px solid var(--iris-dim);
+  color: #f07a3e;
 }
-.badge-admin {
+.badge-administrateur, .badge-admin {
   background: var(--electric-glow);
-  color: var(--electric);
-  border: 1px solid var(--electric-dim);
+  color: #3aa3e6;
 }
 .badge-moderateur {
-  background: rgba(63, 185, 80, 0.1);
-  color: var(--phosphor);
-  border: 1px solid var(--phosphor-dim);
+  background: rgba(240, 240, 240, 0.08);
+  color: var(--text-primary);
 }
 .badge-membre {
-  background: rgba(139, 148, 158, 0.1);
+  background: rgba(163, 175, 188, 0.1);
   color: var(--text-secondary);
-  border: 1px solid var(--border-default);
 }
 .post-content {
   font-size: 0.9375rem;
@@ -703,7 +707,7 @@ img {
 }
 .message-sent {
   align-self: flex-end;
-  background: var(--electric);
+  background: var(--btn-blue);
   color: var(--text-on-accent);
   border-bottom-right-radius: var(--space-xs);
 }
@@ -749,7 +753,7 @@ img {
   font-family: var(--font-heading);
   font-size: 2rem;
   font-weight: 700;
-  color: var(--phosphor);
+  color: #f07a3e;
 }
 .donation-grid {
   display: grid;
@@ -792,9 +796,9 @@ img {
 .news-category.vulnerability { background: var(--signal); }
 .news-category.malware { background: var(--amber); }
 .news-category.data_breach { background: var(--signal); }
-.news-category.tutorial { background: var(--phosphor); }
-.news-category.event { background: var(--electric); }
-.news-category.tool { background: var(--iris); }
+.news-category.tutorial { background: var(--electric-dim); }
+.news-category.event { background: var(--btn-blue); }
+.news-category.tool { background: var(--btn-orange); }
 .news-title {
   font-family: var(--font-heading);
   font-weight: 600;
@@ -908,7 +912,7 @@ img {
 }
 .admin-stat.electric .admin-stat-value { color: var(--electric); }
 .admin-stat.iris .admin-stat-value { color: var(--iris); }
-.admin-stat.phosphor .admin-stat-value { color: var(--phosphor); }
+.admin-stat.phosphor .admin-stat-value { color: #f07a3e; }
 .admin-stat.signal .admin-stat-value { color: var(--signal); }
 
 /* --- Tables --- */
@@ -980,6 +984,7 @@ img {
 .text-iris { color: var(--iris); }
 .text-signal { color: var(--signal); }
 .text-phosphor { color: var(--phosphor); }
+.text-orange { color: #f07a3e; }
 .font-mono { font-family: var(--font-mono); }
 .mt-sm { margin-top: var(--space-sm); }
 .mt-md { margin-top: var(--space-md); }

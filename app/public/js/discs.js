@@ -233,8 +233,8 @@
         warp.style.height = r.height + 'px';
         const bg = surface.style.backgroundImage;
         warp.style.background = bg
-            ? bg + ' center 32% / 116% no-repeat, #1c2128'
-            : 'radial-gradient(circle at 35% 30%, #4b8ff8, #2f81f7 40%, #8957e5)';
+            ? bg + ' center 32% / 116% no-repeat, #111a24'
+            : 'radial-gradient(circle at 35% 30%, #3aa3e6, #1489d1 40%, #e75b1c)';
         document.body.appendChild(warp);
         el.style.visibility = 'hidden';
         page.classList.add('is-launching');

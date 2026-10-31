@@ -7,7 +7,7 @@
 SET NAMES utf8mb4;
 
 -- ============================================================
--- 12 Membres ICS — un mot de passe unique par compte (hash bcrypt)
+-- 14 Membres ICS — un mot de passe unique par compte (hash bcrypt)
 -- ============================================================
 INSERT INTO users (username, email, password_hash, display_name, role, status, department, bio, city, is_admin, avatar_url, created_at, activated_at) VALUES
 
@@ -45,11 +45,15 @@ INSERT INTO users (username, email, password_hash, display_name, role, status, d
 ('gnalyemmanuel', 'gnaly@ics-lab.ci', '$2y$10$V6za4Fb3jyyL6j1Mni6IVutwUzcgC9s.QuVZlF0DKHOU9VW6B0htm', 'GNALY Emmanuel', 'membre', 'actif', 'Communication', 'Département Communication. Stratégie de communication digitale et gestion de la communauté en ligne.', 'Abidjan', 0, '/img/members/gnalyemmanuel.jpg', '2025-04-10 09:00:00', '2025-04-10 09:00:30'),
 
 -- Secrétariat (ajouté par le client)
-('dombamohamed', 'domba@ics-lab.ci', '$2y$10$tMlN5iJcA1RZa0y..xwrK.GO.j9ytD5S1UstH1tC0pyvbIz1VeOqG', 'DOMBA Mohamed', 'membre', 'actif', 'Secrétariat', 'Secrétariat ICS. Organisation, planification et gestion administrative de l''association.', 'Abidjan', 0, '/img/members/dombamohamed.jpg', '2025-04-15 10:00:00', '2025-04-15 10:00:30');
+('dombamohamed', 'domba@ics-lab.ci', '$2y$10$tMlN5iJcA1RZa0y..xwrK.GO.j9ytD5S1UstH1tC0pyvbIz1VeOqG', 'DOMBA Mohamed', 'membre', 'actif', 'Secrétariat', 'Secrétariat ICS. Organisation, planification et gestion administrative de l''association.', 'Abidjan', 0, '/img/members/dombamohamed.jpg', '2025-04-15 10:00:00', '2025-04-15 10:00:30'),
+
+-- Nouveaux membres (ajoutés par le client)
+('kouameamoin', 'kouame@ics-lab.ci', '$2y$10$PdNEnGUT3j6ZGQ0DdVTiHe8xuTmftq0pQH6uGb0JqjWDDAFylLmla', 'KOUAME AMOIN NEL', 'membre', 'actif', 'Sensibilisation', 'Chargée de la sensibilisation. Ateliers sur l''hygiène numérique, le phishing et la protection des données personnelles.', 'Abidjan', 0, '/img/members/kouameamoin.jpg', '2025-05-02 09:00:00', '2025-05-02 09:00:30'),
+('yohananfredo', 'yohanan@ics-lab.ci', '$2y$10$M2Rq/cBd9frNMcIMTmdF4eR4euLC2umApYy18IWhwLwp78w4TaDYK', 'YOHANAN FREDO', 'membre', 'actif', 'Technique', 'Département Technique. Administration système, durcissement de serveurs Linux et supervision réseau.', 'Abidjan', 0, '/img/members/yohananfredo.jpg', '2025-05-05 10:00:00', '2025-05-05 10:00:30');
 
 
 -- ============================================================
--- 24 Publications (2 par membre)
+-- 28 Publications (2 par membre)
 -- ============================================================
 INSERT INTO posts (user_id, content, visibility, likes_count, comments_count, created_at) VALUES
 
@@ -99,7 +103,15 @@ INSERT INTO posts (user_id, content, visibility, likes_count, comments_count, cr
 
 -- DOMBA Mohamed (id=12)
 (12, 'Planning des réunions mensuelles mis à jour pour le dernier trimestre 2025. Chaque 1er samedi du mois, 10h-12h en visio. L''ordre du jour sera partagé 48h avant chaque réunion. Présence fortement encouragée !', 'members', 8, 2, '2025-08-01 08:00:00'),
-(12, 'Mise à jour des statuts de l''association : le nouveau règlement intérieur a été validé en assemblée générale. Document disponible dans l''espace membres. Merci à tous pour vos contributions lors des discussions.', 'members', 13, 4, '2025-09-25 11:00:00');
+(12, 'Mise à jour des statuts de l''association : le nouveau règlement intérieur a été validé en assemblée générale. Document disponible dans l''espace membres. Merci à tous pour vos contributions lors des discussions.', 'members', 13, 4, '2025-09-25 11:00:00'),
+
+-- KOUAME AMOIN NEL (id=13)
+(13, 'Atelier de sensibilisation ce jeudi : reconnaître un email de phishing en 5 points. Expéditeur, liens, pièces jointes, urgence et fautes : on passe tout en revue avec des exemples concrets. Ouvert à tous !', 'public', 11, 2, '2025-09-28 09:30:00'),
+(13, 'Rappel hygiène numérique : activez la double authentification sur vos comptes et utilisez un gestionnaire de mots de passe. Un mot de passe unique par service, c''est la base.', 'members', 9, 1, '2025-10-04 15:00:00'),
+
+-- YOHANAN FREDO (id=14)
+(14, 'Retour d''expérience : durcissement d''un serveur Ubuntu en 10 étapes (SSH par clé, fail2ban, pare-feu, mises à jour automatiques, journaux centralisés...). La fiche complète est disponible dans l''espace membres.', 'members', 14, 3, '2025-10-01 11:00:00'),
+(14, 'Qui est partant pour un mini-CTF orienté administration système le mois prochain ? Escalade de privilèges, mauvaises permissions et services exposés au programme. Répondez en commentaire !', 'public', 10, 2, '2025-10-08 18:00:00');
 
 
 -- ============================================================

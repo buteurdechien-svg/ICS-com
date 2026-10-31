@@ -66,7 +66,7 @@
             vx: (Math.random() - 0.5) * 0.35,
             vy: (Math.random() - 0.5) * 0.35,
             r: Math.random() * 1.6 + 0.6,
-            hue: Math.random() < 0.7 ? 'rgba(88,166,255,' : 'rgba(163,113,247,'
+            hue: Math.random() < 0.7 ? 'rgba(58,163,230,' : 'rgba(240,122,62,'
         }));
     }
     resize();
@@ -88,7 +88,7 @@
                 const d = Math.hypot(dx, dy);
                 if (d < mouseLink) {
                     n.x += dx * 0.012; n.y += dy * 0.012;
-                    ctx.strokeStyle = 'rgba(88,166,255,' + (1 - d / mouseLink) * 0.75 + ')';
+                    ctx.strokeStyle = 'rgba(58,163,230,' + (1 - d / mouseLink) * 0.75 + ')';
                     ctx.lineWidth = 1;
                     ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(mouse.sx, mouse.sy); ctx.stroke();
                 }
@@ -97,7 +97,7 @@
                 const m = nodes[j];
                 const d = Math.hypot(n.x - m.x, n.y - m.y);
                 if (d < link) {
-                    ctx.strokeStyle = 'rgba(88,166,255,' + (1 - d / link) * 0.22 + ')';
+                    ctx.strokeStyle = 'rgba(58,163,230,' + (1 - d / link) * 0.22 + ')';
                     ctx.lineWidth = 0.8;
                     ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); ctx.stroke();
                 }

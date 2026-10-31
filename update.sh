@@ -95,7 +95,7 @@ EOSQL
     step "4/4 — Vérifications"
     local USERS EXPECTED_HASH DB_HASH ERRORS=0
     USERS="$(mysql -N -u "${DB_USER}" "${DB_NAME}" -e "SELECT COUNT(*) FROM users WHERE status='actif'")"
-    [[ "${USERS}" == "12" ]] && ok "12 comptes membres actifs" || { warn "Comptes actifs : ${USERS} (attendu : 12)"; ERRORS=1; }
+    [[ "${USERS}" == "14" ]] && ok "14 comptes membres actifs" || { warn "Comptes actifs : ${USERS} (attendu : 14)"; ERRORS=1; }
 
     # Le hash en base doit être celui du dépôt (prouve que les nouveaux mots de passe sont actifs)
     EXPECTED_HASH="$(grep -o "'volkoff@ics-lab.ci', '[^']*'" "${REPO_DIR}/database/seed.sql" | cut -d"'" -f4 || true)"

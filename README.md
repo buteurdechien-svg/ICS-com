@@ -65,6 +65,8 @@ Chaque compte a un mot de passe unique. Les mots de passe ne sont pas publiés d
 | ahizimarc | ahizi@ics-lab.ci | membre |
 | gnalyemmanuel | gnaly@ics-lab.ci | membre |
 | dombamohamed | domba@ics-lab.ci | membre |
+| kouameamoin | kouame@ics-lab.ci | membre |
+| yohananfredo | yohanan@ics-lab.ci | membre |
 
 ### Mise à jour (après un nouveau push sur GitHub)
 

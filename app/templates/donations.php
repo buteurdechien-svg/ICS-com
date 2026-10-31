@@ -104,7 +104,7 @@ unset($_SESSION['flash_message']);
                     <div style="padding: var(--space-sm) 0; border-bottom: 1px solid var(--border-muted);">
                         <div class="flex flex-between flex-center">
                             <span style="font-weight: 500; font-size: 0.875rem;"><?= e($don['donor_name']) ?></span>
-                            <span class="text-phosphor" style="font-family: var(--font-heading); font-weight: 600; font-size: 0.875rem;">
+                            <span class="text-orange" style="font-family: var(--font-heading); font-weight: 600; font-size: 0.875rem;">
                                 <?= formatCurrency($don['amount']) ?>
                             </span>
                         </div>
