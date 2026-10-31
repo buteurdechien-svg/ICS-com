@@ -36,10 +36,7 @@ unset($_SESSION['flash_message']);
 
             <!-- Formulaire de don -->
             <div class="card animate-in">
-                <h3 class="card-title" style="margin-bottom: var(--space-lg);">Faire un don (simulé)</h3>
-                <div class="alert alert-warning" style="font-size: 0.8125rem;">
-                    Ceci est un environnement de laboratoire. Aucune transaction réelle n'est effectuée.
-                </div>
+                <h3 class="card-title" style="margin-bottom: var(--space-lg);">Faire un don</h3>
                 <form method="POST" action="/api/donations" id="donation-form">
                     <?= csrfField() ?>
                     <div class="form-group">
@@ -93,7 +90,7 @@ unset($_SESSION['flash_message']);
                     </div>
 
                     <button type="submit" class="btn btn-iris btn-lg" style="width: 100%; justify-content: center;">
-                        Confirmer le don (simulé)
+                        Confirmer le don
                     </button>
                 </form>
             </div>
@@ -126,7 +123,7 @@ unset($_SESSION['flash_message']);
             <div class="sidebar-widget">
                 <h3>Moyens de paiement acceptés</h3>
                 <p class="text-muted" style="font-size: 0.8125rem; line-height: 1.6;">
-                    Wave, Orange Money, Moov Money, Binance (BTC), et VISA. Tous les dons sont simulés dans cet environnement de laboratoire.
+                    Wave, Orange Money, Moov Money, Binance (BTC), et VISA.
                 </p>
             </div>
         </aside>

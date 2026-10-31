@@ -18,7 +18,7 @@ $recentNews = $db->query("SELECT * FROM cyber_news ORDER BY published_at DESC LI
 <section class="hero">
     <div class="container">
         <div class="hero-content animate-in">
-            <h1>La communauté cybersécurité de Côte d'Ivoire</h1>
+            <h1 class="hero-title">La communauté cybersécurité de Côte d'Ivoire</h1>
             <p>Ivoire Cyber Shield rassemble les passionnés de cybersécurité pour apprendre, partager et protéger le cyberespace ivoirien.</p>
             <div>
                 <?php if (!isLoggedIn()): ?>
@@ -31,11 +31,11 @@ $recentNews = $db->query("SELECT * FROM cyber_news ORDER BY published_at DESC LI
 
             <div class="hero-stats">
                 <div class="hero-stat">
-                    <div class="hero-stat-value"><?= $memberCount ?></div>
+                    <div class="hero-stat-value stat-counter" data-target="<?= $memberCount ?>"><?= $memberCount ?></div>
                     <div class="hero-stat-label">Membres actifs</div>
                 </div>
                 <div class="hero-stat">
-                    <div class="hero-stat-value"><?= $postCount ?></div>
+                    <div class="hero-stat-value stat-counter" data-target="<?= $postCount ?>"><?= $postCount ?></div>
                     <div class="hero-stat-label">Publications</div>
                 </div>
                 <div class="hero-stat">
