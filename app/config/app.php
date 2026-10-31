@@ -3,13 +3,17 @@
  * ICS Community — Configuration générale
  */
 
+// Charger le .env (si pas déjà fait)
+require_once __DIR__ . '/database.php';
+loadEnv();
+
 define('APP_NAME', getenv('APP_NAME') ?: 'ICS Community');
-define('APP_URL', getenv('APP_URL') ?: 'http://localhost:8080');
+define('APP_URL', getenv('APP_URL') ?: 'http://localhost');
 define('APP_ENV', getenv('APP_ENV') ?: 'lab');
 define('APP_DEBUG', getenv('APP_DEBUG') === 'true');
 define('APP_SECRET', getenv('APP_SECRET') ?: 'change_me');
 
-define('SMTP_HOST', getenv('SMTP_HOST') ?: 'mailpit');
+define('SMTP_HOST', getenv('SMTP_HOST') ?: '127.0.0.1');
 define('SMTP_PORT', (int)(getenv('SMTP_PORT') ?: 1025));
 define('SMTP_FROM', getenv('SMTP_FROM') ?: 'noreply@ics-community.lab');
 

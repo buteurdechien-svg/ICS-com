@@ -6,18 +6,20 @@ Plateforme communautaire volontairement vulnérable pour la formation au pentest
 
 ## Stack technique
 
-- **Backend :** PHP 8.2 + Apache
+- **Serveur :** Ubuntu Server 22.04 LTS
+- **Backend :** PHP 8.2 + Apache 2
 - **Base de données :** MySQL 8.0 (InnoDB)
-- **Conteneurisation :** Docker Compose
 - **Email :** Mailpit (capture SMTP locale)
-- **CVE Lab :** Conteneur isolé PHP (port 8081)
+- **CVE Lab :** Conteneur Docker isolé (optionnel, port 8081)
 
 ## Installation
 
 ### Prérequis
 
-- Docker et Docker Compose
-- Git
+- Ubuntu Server 22.04 LTS (fresh install ou existant)
+- Accès root (sudo)
+- Connexion Internet (pour les paquets)
+- Docker (optionnel, uniquement pour le scénario CVE n°15)
 
 ### Lancement
 
@@ -26,22 +28,24 @@ Plateforme communautaire volontairement vulnérable pour la formation au pentest
 git clone https://github.com/buteurdechien-svg/ICS-com.git
 cd ICS-com
 
-# Copier la configuration
-cp .env.example .env
-
-# Lancer les services
-docker compose up -d --build
-
-# Attendre ~30 secondes que MySQL initialise le schéma et les données seed
+# Lancer l'installation (génère automatiquement les mots de passe)
+sudo bash install.sh
 ```
+
+Le script installe et configure automatiquement :
+- Apache 2 + PHP 8.2 + extensions (mysql, mbstring, xml, curl, gd, zip)
+- MySQL 8.0 avec schéma et données seed
+- Mailpit pour la capture des emails
+- Le fichier `.env` avec des credentials aléatoires
+- Le VirtualHost Apache
 
 ### Accès
 
 | Service | URL | Description |
 |---------|-----|-------------|
-| Application | http://localhost:8080 | Plateforme communautaire ICS |
+| Application | http://localhost | Plateforme communautaire ICS |
 | Mailpit | http://localhost:8025 | Interface email de test |
-| CVE Lab | http://localhost:8081 | Simulation CVE PHP 2026 |
+| CVE Lab | http://localhost:8081 | Simulation CVE PHP 2026 (si Docker) |
 
 ### Comptes de test
 
@@ -65,9 +69,8 @@ Tous les comptes utilisent le mot de passe : `Password123!`
 ### Réinitialisation
 
 ```bash
-# Tout reconstruire (supprime les données)
-docker compose down -v
-docker compose up -d --build
+# Remettre la base de données à l'état initial
+sudo bash reset-lab.sh
 ```
 
 ## Vulnérabilités

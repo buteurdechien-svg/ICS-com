@@ -1,4 +1,5 @@
 .env
+credentials.txt
 app/public/uploads/*
 !app/public/uploads/.gitkeep
 vendor/
