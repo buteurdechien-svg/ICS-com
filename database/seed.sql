@@ -48,7 +48,7 @@ INSERT INTO users (username, email, password_hash, display_name, role, status, d
 ('dombamohamed', 'domba@ics-lab.ci', '$2y$10$tMlN5iJcA1RZa0y..xwrK.GO.j9ytD5S1UstH1tC0pyvbIz1VeOqG', 'DOMBA Mohamed', 'membre', 'actif', 'Secrétariat', 'Secrétariat ICS. Organisation, planification et gestion administrative de l''association.', 'Abidjan', 0, '/img/members/dombamohamed.jpg', '2025-04-15 10:00:00', '2025-04-15 10:00:30'),
 
 -- Nouveaux membres (ajoutés par le client)
-('kouameamoin', 'kouame@ics-lab.ci', '$2y$10$PdNEnGUT3j6ZGQ0DdVTiHe8xuTmftq0pQH6uGb0JqjWDDAFylLmla', 'KOUAME AMOIN NEL', 'membre', 'actif', 'Sensibilisation', 'Chargée de la sensibilisation. Ateliers sur l''hygiène numérique, le phishing et la protection des données personnelles.', 'Abidjan', 0, '/img/members/kouameamoin.jpg', '2025-05-02 09:00:00', '2025-05-02 09:00:30'),
+('neloumgrace', 'neloum@ics-lab.ci', '$2y$10$.nNeROK1my41BDQS8GwnIenmmEK6c9BOcLveLfttLfFZCwYM7CU2G', 'Neloum Grâce', 'membre', 'actif', 'Sensibilisation', 'Chargée de la sensibilisation. Ateliers sur l''hygiène numérique, le phishing et la protection des données personnelles.', 'Abidjan', 0, '/img/members/neloumgrace.jpg', '2025-05-02 09:00:00', '2025-05-02 09:00:30'),
 ('yohananfredo', 'yohanan@ics-lab.ci', '$2y$10$M2Rq/cBd9frNMcIMTmdF4eR4euLC2umApYy18IWhwLwp78w4TaDYK', 'YOHANAN FREDO', 'membre', 'actif', 'Technique', 'Département Technique. Administration système, durcissement de serveurs Linux et supervision réseau.', 'Abidjan', 0, '/img/members/yohananfredo.jpg', '2025-05-05 10:00:00', '2025-05-05 10:00:30');
 
 
@@ -105,7 +105,7 @@ INSERT INTO posts (user_id, content, visibility, likes_count, comments_count, cr
 (12, 'Planning des réunions mensuelles mis à jour pour le dernier trimestre 2025. Chaque 1er samedi du mois, 10h-12h en visio. L''ordre du jour sera partagé 48h avant chaque réunion. Présence fortement encouragée !', 'members', 8, 2, '2025-08-01 08:00:00'),
 (12, 'Mise à jour des statuts de l''association : le nouveau règlement intérieur a été validé en assemblée générale. Document disponible dans l''espace membres. Merci à tous pour vos contributions lors des discussions.', 'members', 13, 4, '2025-09-25 11:00:00'),
 
--- KOUAME AMOIN NEL (id=13)
+-- Neloum Grâce (id=13)
 (13, 'Atelier de sensibilisation ce jeudi : reconnaître un email de phishing en 5 points. Expéditeur, liens, pièces jointes, urgence et fautes : on passe tout en revue avec des exemples concrets. Ouvert à tous !', 'public', 11, 2, '2025-09-28 09:30:00'),
 (13, 'Rappel hygiène numérique : activez la double authentification sur vos comptes et utilisez un gestionnaire de mots de passe. Un mot de passe unique par service, c''est la base.', 'members', 9, 1, '2025-10-04 15:00:00'),
 
