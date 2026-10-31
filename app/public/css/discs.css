@@ -1,0 +1,429 @@
+/* ============================================================
+   ICS Community — Disques membres (inspiré du carrousel A24)
+   Chaque membre est un disque : photo imprimée, trou central,
+   anneau transparent, reflet irisé qui suit la souris,
+   épaisseur 3D, rotation continue.
+   ============================================================ */
+
+/* --- Le disque --- */
+.disc {
+  --size: 320px;
+  --sheen: 0deg;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  transform-style: preserve-3d;
+}
+.disc-body {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateZ(var(--spin, 0deg));
+}
+/* tranche du disque (épaisseur) */
+.disc-edge {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 0 9.5%, #9aa3ad 10%, #c9d0d8 60%, #8f98a3 100%);
+  -webkit-mask: radial-gradient(circle, transparent 0 9.5%, #000 10%);
+          mask: radial-gradient(circle, transparent 0 9.5%, #000 10%);
+}
+.disc-edge:nth-child(1) { transform: translateZ(-2px); }
+.disc-edge:nth-child(2) { transform: translateZ(-4px); background: radial-gradient(circle, transparent 0 9.5%, #6d757e 10%, #8c949d 100%); }
+
+/* face imprimée */
+.disc-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #1c2128;
+  background-size: cover;
+  background-position: center 30%;
+  box-shadow: inset 0 0 0 calc(var(--size) * .012) rgba(230, 235, 240, .9),
+              inset 0 0 0 calc(var(--size) * .022) rgba(160, 170, 180, .55),
+              inset 0 0 calc(var(--size) * .12) rgba(0, 0, 0, .45);
+  -webkit-mask: radial-gradient(circle, transparent 0 9.5%, #000 10%);
+          mask: radial-gradient(circle, transparent 0 9.5%, #000 10%);
+}
+.disc-initials {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: calc(var(--size) * .2);
+  color: rgba(255, 255, 255, .9);
+  background: linear-gradient(135deg, var(--electric), var(--iris));
+}
+/* voile pour lisibilité du texte imprimé */
+.disc-face::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(5, 10, 20, .65) 92%);
+}
+/* reflet irisé (angle piloté par la souris) */
+.disc-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  opacity: .85;
+  background: conic-gradient(from var(--sheen),
+    rgba(255, 255, 255, 0) 0deg,
+    rgba(255, 255, 255, .42) 18deg,
+    rgba(120, 200, 255, .18) 40deg,
+    rgba(255, 255, 255, 0) 70deg,
+    rgba(255, 160, 255, .22) 150deg,
+    rgba(255, 255, 255, 0) 180deg,
+    rgba(255, 255, 255, .38) 198deg,
+    rgba(160, 255, 210, .16) 222deg,
+    rgba(255, 255, 255, 0) 250deg,
+    rgba(255, 220, 140, .18) 320deg,
+    rgba(255, 255, 255, 0) 360deg);
+}
+/* texte imprimé sur le disque */
+.disc-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16%;
+  text-align: center;
+  color: #fff;
+  pointer-events: none;
+  z-index: 1;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .6);
+}
+.disc-label strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: calc(var(--size) * .085);
+  letter-spacing: -.01em;
+  line-height: 1;
+}
+.disc-label span {
+  display: block;
+  margin-top: calc(var(--size) * .02);
+  font-family: var(--font-mono);
+  font-size: calc(var(--size) * .035);
+  letter-spacing: .12em;
+  color: rgba(200, 225, 255, .9);
+}
+/* moyeu transparent */
+.disc-hub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34%;
+  height: 34%;
+  transform: translate(-50%, -50%) translateZ(.5px);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    transparent 0 27.5%,
+    rgba(255, 255, 255, .75) 29%,
+    rgba(210, 216, 222, .55) 34%,
+    rgba(255, 255, 255, .25) 50%,
+    rgba(190, 198, 206, .55) 62%,
+    rgba(255, 255, 255, .7) 64%,
+    rgba(150, 160, 170, .35) 66%,
+    rgba(255, 255, 255, .12) 100%);
+  -webkit-mask: radial-gradient(circle, transparent 0 28%, #000 29%);
+          mask: radial-gradient(circle, transparent 0 28%, #000 29%);
+}
+/* ombre portée */
+.disc-shadow {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -14%;
+  height: 16%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, .5), rgba(0, 0, 0, .2) 45%, transparent 70%);
+  transform: translateZ(-40px);
+  pointer-events: none;
+}
+
+/* ============================================================
+   Page Membres — carrousel
+   ============================================================ */
+.discs-page {
+  min-height: calc(100vh - 94px);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+  padding: var(--space-xl) 0 var(--space-lg);
+  user-select: none;
+}
+.discs-info {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-lg);
+  align-items: start;
+}
+.discs-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  line-height: .95;
+  letter-spacing: -.03em;
+  text-transform: uppercase;
+  background: linear-gradient(120deg, #fff 10%, var(--electric) 55%, var(--iris) 95%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  min-height: 1em;
+}
+.discs-meta {
+  margin-top: var(--space-md);
+  max-width: 460px;
+  border-top: 1px solid var(--border-default);
+}
+.discs-meta div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border-default);
+  font-size: .875rem;
+}
+.discs-meta dt {
+  color: var(--text-muted);
+  font-size: .75rem;
+  letter-spacing: .06em;
+}
+.discs-meta dd {
+  color: var(--text-primary);
+  text-align: right;
+}
+.discs-counter {
+  font-family: var(--font-mono);
+  font-size: .875rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.discs-counter b {
+  font-size: 2.5rem;
+  font-family: var(--font-heading);
+  color: var(--text-primary);
+  margin-right: 4px;
+}
+
+.discs-stage {
+  position: relative;
+  min-height: 460px;
+  perspective: 1400px;
+  perspective-origin: 50% 40%;
+  cursor: grab;
+  touch-action: pan-y;
+}
+.discs-stage.is-dragging { cursor: grabbing; }
+.discs-track {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;   /* sinon ce calque 3D transparent capte les clics devant les disques */
+}
+.disc-slot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--slot);
+  height: var(--slot);
+  margin: calc(var(--slot) / -2) 0 0 calc(var(--slot) / -2);
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.disc-slot:focus-visible { outline: none; }
+.disc-slot:focus-visible .disc-face { box-shadow: 0 0 0 4px var(--electric); }
+.disc-slot .disc {
+  --size: var(--slot);
+  transform: rotateX(var(--tx, 32deg)) rotateY(var(--ty, -18deg)) rotateZ(-14deg);
+  transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.16, 1, .3, 1);
+}
+.disc-slot.is-current .disc { transition: none; }
+
+/* cercle tracé à la main au survol */
+.disc-scribble {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--slot) * 1.3);
+  height: calc(var(--slot) * 1.12);
+  transform: translate(-50%, -50%) rotate(-8deg);
+  pointer-events: none;
+  z-index: 5;
+  overflow: visible;
+}
+.disc-scribble path {
+  fill: none;
+  stroke: var(--electric);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(47, 129, 247, .9));
+  stroke-dasharray: 2600;
+  stroke-dashoffset: 2600;
+  transition: stroke-dashoffset .9s cubic-bezier(.65, 0, .35, 1);
+}
+.discs-stage.is-hovering-current .disc-scribble path { stroke-dashoffset: 0; }
+
+.disc-cta {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  letter-spacing: .08em;
+  color: var(--text-secondary);
+  pointer-events: none;
+  transition: opacity .3s ease, color .3s ease;
+}
+.discs-stage.is-hovering-current .disc-cta { color: var(--electric); }
+
+/* lancement vers le profil */
+.disc-slot.is-launching .disc {
+  transition: transform .7s cubic-bezier(.7, 0, .3, 1);
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1.25);
+}
+.discs-page.is-launching .discs-info,
+.discs-page.is-launching .discs-strip,
+.discs-page.is-launching .disc-slot:not(.is-launching) {
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+
+/* index miniature */
+.discs-strip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: var(--space-md) var(--space-lg) 0;
+}
+.discs-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.discs-arrow:hover { border-color: var(--electric); box-shadow: 0 0 14px rgba(47, 129, 247, .4); }
+.discs-thumb {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 0;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  cursor: pointer;
+  opacity: .5;
+  transition: opacity .25s ease, transform .25s ease, border-color .25s ease;
+  font-size: .625rem;
+  color: #fff;
+  font-weight: 700;
+}
+.discs-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.discs-thumb:hover { opacity: .9; transform: translateY(-2px); }
+.discs-thumb.is-current {
+  opacity: 1;
+  border-color: var(--electric);
+  box-shadow: 0 0 12px rgba(47, 129, 247, .7);
+  transform: scale(1.15);
+}
+
+.discs-hint {
+  text-align: center;
+  font-size: .75rem;
+  color: var(--text-muted);
+  margin-top: var(--space-sm);
+}
+
+@media (min-width: 721px) {
+  .discs-page {
+    display: block;
+    height: calc(100vh - 94px);
+    min-height: 600px;
+    padding: 0;
+  }
+  .discs-info {
+    position: absolute;
+    top: var(--space-xl);
+    left: 0;
+    right: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .discs-meta { max-width: 380px; }
+  .discs-stage {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+  }
+  .discs-strip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 40px;
+    z-index: 3;
+  }
+  .discs-hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 12px;
+    margin: 0;
+    z-index: 3;
+  }
+  .disc-cta { bottom: 100px; }
+  .disc-slot { top: 54%; }
+  .disc-scribble { top: 54%; }
+}
+@media (max-width: 720px) {
+  .discs-info { grid-template-columns: 1fr; }
+  .discs-counter { order: -1; }
+  .discs-stage { min-height: 360px; }
+  .discs-meta { max-width: none; }
+}
+
+/* ============================================================
+   Page profil — disque du membre
+   ============================================================ */
+.profile-disc {
+  --slot: 180px;
+  width: var(--slot);
+  height: var(--slot);
+  flex-shrink: 0;
+  perspective: 900px;
+  margin: -10px 10px;
+}
+.profile-disc .disc {
+  --size: var(--slot);
+  transform: rotateX(var(--tx, 24deg)) rotateY(var(--ty, -16deg)) rotateZ(-12deg);
+  transition: transform .2s ease-out;
+}
+.profile-disc .disc-label strong { font-size: calc(var(--size) * .1); }
+@media (max-width: 640px) {
+  .profile-disc { --slot: 160px; margin: 0 auto; }
+}
+

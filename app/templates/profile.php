@@ -1,5 +1,7 @@
 <?php
 $pageTitle = 'Profil';
+$extraCss = ['/css/discs.css'];
+$extraJs = ['/js/discs.js'];
 include __DIR__ . '/partials/header.php';
 $db = getDB();
 
@@ -35,16 +37,27 @@ $postCount = count($userPosts);
     <!-- En-tête profil -->
     <div class="profile-header animate-in">
         <div class="profile-top">
-            <div class="profile-avatar">
-                <?php if (!empty($profile['avatar_url'])): ?>
-                    <img src="<?= e($profile['avatar_url']) ?>" alt="<?= e($profile['display_name']) ?>" class="avatar-img">
-                <?php else: ?>
-                    <?= getInitials($profile['display_name']) ?>
-                <?php endif; ?>
+            <div class="profile-disc" role="img" aria-label="Disque de <?= e($profile['display_name']) ?>">
+                <div class="disc">
+                    <div class="disc-shadow"></div>
+                    <div class="disc-body">
+                        <div class="disc-edge"></div><div class="disc-edge"></div>
+                        <div class="disc-face"<?php if (!empty($profile['avatar_url'])): ?> style="background-image: url('<?= e($profile['avatar_url']) ?>')"<?php endif; ?>>
+                            <?php if (empty($profile['avatar_url'])): ?>
+                                <div class="disc-initials"><?= e(getInitials($profile['display_name'])) ?></div>
+                            <?php endif; ?>
+                            <div class="disc-label">
+                                <strong><?= e($profile['username']) ?></strong>
+                                <span>ICS · <?= e(strtoupper($profile['role'])) ?></span>
+                            </div>
+                        </div>
+                        <div class="disc-hub"></div>
+                    </div>
+                </div>
             </div>
             <div class="profile-info">
                 <h1>
-                    <?= e($profile['display_name']) ?>
+                    <span class="fx-name"><?= e($profile['display_name']) ?></span>
                     <span class="post-badge badge-<?= $profile['role'] ?>"><?= $profile['role'] ?></span>
                 </h1>
                 <div class="profile-department">
@@ -57,7 +70,7 @@ $postCount = count($userPosts);
                     <div class="profile-bio"><?= e($profile['bio']) ?></div>
                 <?php endif; ?>
                 <div class="mt-md text-muted" style="font-size: 0.8125rem;">
-                    Membre depuis <?= date('F Y', strtotime($profile['created_at'])) ?>
+                    Membre depuis <?= ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'][(int)date('n', strtotime($profile['created_at'])) - 1] . ' ' . date('Y', strtotime($profile['created_at'])) ?>
                     · <?= $postCount ?> publication<?= $postCount > 1 ? 's' : '' ?>
                 </div>
             </div>

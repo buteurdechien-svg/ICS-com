@@ -37,3 +37,20 @@ define('DONATION_INITIAL_TOTAL', 23987485);
 
 // Activation automatique après 30 secondes
 define('AUTO_ACTIVATION_DELAY', 30);
+
+/**
+ * URL d'un fichier statique avec version (évite le cache navigateur après mise à jour)
+ */
+function asset(string $path): string {
+    $file = __DIR__ . '/../public' . $path;
+    $v = is_file($file) ? filemtime($file) : time();
+    return $path . '?v=' . $v;
+}
+
+/**
+ * Version déployée (écrite par install.sh / update.sh)
+ */
+function appBuild(): string {
+    $file = __DIR__ . '/../VERSION';
+    return is_file($file) ? trim((string)file_get_contents($file)) : 'dev';
+}

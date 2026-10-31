@@ -16,8 +16,8 @@
         });
     }
 
-    // ── Flash messages — auto-dismiss ───────────────────────────────
-    document.querySelectorAll('.alert').forEach(alert => {
+    // ── Flash messages — auto-dismiss (succès/info seulement : les erreurs restent visibles)
+    document.querySelectorAll('.alert-success, .alert-info').forEach(alert => {
         setTimeout(() => {
             alert.style.opacity = '0';
             alert.style.transform = 'translateY(-8px)';

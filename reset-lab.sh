@@ -31,7 +31,7 @@ else
 fi
 
 echo -e "${GREEN}[1/3]${NC} Suppression des tables existantes..."
-mysql -u "${DB_USER}" -p"${DB_PASS}" "${DB_NAME}" -e "
+MYSQL_PWD="${DB_PASS}" mysql -u "${DB_USER}" "${DB_NAME}" -e "
 SET FOREIGN_KEY_CHECKS = 0;
 SET @tables = NULL;
 SELECT GROUP_CONCAT(table_name) INTO @tables
@@ -45,10 +45,10 @@ SET FOREIGN_KEY_CHECKS = 1;
 "
 
 echo -e "${GREEN}[2/3]${NC} Import du schéma..."
-mysql -u "${DB_USER}" -p"${DB_PASS}" "${DB_NAME}" < "${SCRIPT_DIR}/database/schema.sql"
+MYSQL_PWD="${DB_PASS}" mysql -u "${DB_USER}" "${DB_NAME}" < "${SCRIPT_DIR}/database/schema.sql"
 
 echo -e "${GREEN}[3/3]${NC} Import des données seed..."
-mysql -u "${DB_USER}" -p"${DB_PASS}" "${DB_NAME}" < "${SCRIPT_DIR}/database/seed.sql"
+MYSQL_PWD="${DB_PASS}" mysql -u "${DB_USER}" "${DB_NAME}" < "${SCRIPT_DIR}/database/seed.sql"
 
 # Nettoyer les uploads
 rm -rf /var/www/ics-storage/uploads/*
@@ -58,5 +58,5 @@ rm -f /var/lib/php/sessions/sess_* 2>/dev/null || true
 
 echo ""
 echo -e "${GREEN}[✓] Laboratoire réinitialisé avec succès !${NC}"
-echo -e "    Credentials : voir le fichier credentials envoyé par mail"
+echo -e "    Sessions vidées : reconnectez-vous avec les identifiants des membres."
 echo ""

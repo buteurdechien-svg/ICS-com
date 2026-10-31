@@ -49,22 +49,34 @@ Le script installe et configure automatiquement :
 
 ### Comptes de test
 
-Tous les comptes utilisent le mot de passe : `Password123!`
+Chaque compte a un mot de passe unique. Les mots de passe ne sont pas publiés dans le dépôt : ils sont fournis au formateur séparément.
 
-| Utilisateur | Email | Rôle |
-|-------------|-------|------|
-| m.ahize | ahize@ics.ci | Président |
-| k.kouadio | kouadio@ics.ci | Administrateur |
-| s.traore | traore@ics.ci | Modérateur |
-| a.coulibaly | coulibaly@ics.ci | Membre |
-| f.bamba | bamba@ics.ci | Membre |
-| d.konan | konan@ics.ci | Membre |
-| n.kone | kone@ics.ci | Membre |
-| j.diallo | diallo@ics.ci | Membre |
-| e.yao | yao@ics.ci | Membre |
-| r.ouattara | ouattara@ics.ci | Membre |
-| g.emmanuel | emmanuel@ics.ci | Membre |
-| d.mohamed | mohamed@ics.ci | Membre |
+| Pseudo | Email | Rôle |
+|--------|-------|------|
+| thesocvolkoff | volkoff@ics-lab.ci | president |
+| massambacyberhack | massamba@ics-lab.ci | administrateur |
+| camson | camson@ics-lab.ci | moderateur |
+| mrshadow | shadow@ics-lab.ci | moderateur |
+| legoatdeshacker | goathacker@ics-lab.ci | moderateur |
+| victoriait | victoria@ics-lab.ci | moderateur |
+| hassancamara | hassan@ics-lab.ci | membre |
+| tehuayann | tehua@ics-lab.ci | membre |
+| hackerman | hackerman@ics-lab.ci | membre |
+| ahizimarc | ahizi@ics-lab.ci | membre |
+| gnalyemmanuel | gnaly@ics-lab.ci | membre |
+| dombamohamed | domba@ics-lab.ci | membre |
+
+### Mise à jour (après un nouveau push sur GitHub)
+
+```bash
+cd ~/ics-community                 # dossier où le dépôt a été cloné
+sudo chown -R $USER: .             # répare les fichiers laissés par d'anciens « sudo git »
+git pull origin main               # SANS sudo (git refuse « sudo git pull » : dubious ownership)
+sudo bash update.sh                # redéploie le code, réinitialise la base, vérifie tout
+```
+
+Le numéro de version déployé s'affiche en bas de chaque page (« build xxxxxxx ») et doit correspondre à `git log --oneline -1`.
+Dans le navigateur, recharger avec **Ctrl+Shift+R**.
 
 ### Réinitialisation
 

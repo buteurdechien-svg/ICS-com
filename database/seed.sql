@@ -7,8 +7,7 @@
 SET NAMES utf8mb4;
 
 -- ============================================================
--- 12 Membres ICS (mots de passe : "Password123!" pour tous)
--- Hash bcrypt de "Password123!"
+-- 12 Membres ICS — un mot de passe unique par compte (hash bcrypt)
 -- ============================================================
 INSERT INTO users (username, email, password_hash, display_name, role, status, department, bio, city, is_admin, avatar_url, created_at, activated_at) VALUES
 

@@ -1,44 +1,82 @@
 <?php
 $pageTitle = 'Membres';
+$extraCss = ['/css/discs.css'];
+$extraJs = ['/js/discs.js'];
 include __DIR__ . '/partials/header.php';
 $db = getDB();
 
 $members = $db->query("SELECT * FROM users WHERE status = 'actif' ORDER BY FIELD(role, 'president','administrateur','moderateur','membre') ASC, created_at ASC")->fetchAll();
+$total = count($members);
 ?>
 
-<div class="container page-content">
-    <h2 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: var(--space-lg);">Membres ICS</h2>
-    <p class="text-muted mb-lg"><?= count($members) ?> membres actifs</p>
+<section class="discs-page" data-discs aria-label="Membres ICS">
+    <header class="discs-info">
+        <div>
+            <h1 class="discs-title" data-disc-title aria-live="polite"><?= $total ? e($members[0]['display_name']) : 'Membres ICS' ?></h1>
+            <dl class="discs-meta">
+                <div><dt>PSEUDO</dt><dd data-disc-field="username"></dd></div>
+                <div><dt>RÔLE</dt><dd data-disc-field="role"></dd></div>
+                <div><dt>DÉPARTEMENT</dt><dd data-disc-field="department"></dd></div>
+                <div><dt>VILLE</dt><dd data-disc-field="city"></dd></div>
+                <div><dt>MEMBRE DEPUIS</dt><dd data-disc-field="since"></dd></div>
+            </dl>
+        </div>
+        <div class="discs-counter"><b data-disc-index>01</b>/ <?= str_pad((string)$total, 2, '0', STR_PAD_LEFT) ?></div>
+    </header>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-md);">
-        <?php foreach ($members as $member): ?>
-            <a href="/profile/<?= $member['id'] ?>" class="card animate-in" style="text-decoration: none; color: inherit;">
-                <div class="flex flex-center gap-md">
-                    <div class="post-avatar" style="width: 56px; height: 56px; font-size: 1.125rem;">
-                        <?php if (!empty($member['avatar_url'])): ?>
-                            <img src="<?= e($member['avatar_url']) ?>" alt="<?= e($member['display_name']) ?>" class="avatar-img">
-                        <?php else: ?>
-                            <?= getInitials($member['display_name']) ?>
-                        <?php endif; ?>
-                    </div>
-                    <div>
-                        <div style="font-weight: 600;"><?= e($member['display_name']) ?></div>
-                        <div class="text-muted" style="font-size: 0.8125rem;">
-                            <?= e($member['department'] ?? '') ?>
+    <div class="discs-stage" data-disc-stage>
+        <svg class="disc-scribble" viewBox="0 0 400 340" aria-hidden="true">
+            <path d="M210 28 C 310 22, 392 92, 384 178 C 376 268, 288 322, 196 318 C 98 314, 14 254, 18 164 C 22 80, 104 24, 214 26 C 300 30, 360 74, 372 120"/>
+        </svg>
+        <div class="discs-track">
+            <?php foreach ($members as $i => $member):
+                $since = (int)date('n', strtotime($member['created_at']));
+                $mois = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'][$since - 1] . ' ' . date('Y', strtotime($member['created_at']));
+            ?>
+            <a class="disc-slot" href="/profile/<?= (int)$member['id'] ?>" data-disc
+               data-name="<?= e($member['display_name']) ?>"
+               data-username="@<?= e($member['username']) ?>"
+               data-role="<?= e($member['role']) ?>"
+               data-department="<?= e($member['department'] ?? '—') ?>"
+               data-city="<?= e($member['city'] ?: '—') ?>"
+               data-since="<?= e($mois) ?>"
+               aria-label="Voir le profil de <?= e($member['display_name']) ?>">
+                <div class="disc">
+                    <div class="disc-shadow"></div>
+                    <div class="disc-body">
+                        <div class="disc-edge"></div><div class="disc-edge"></div>
+                        <div class="disc-face"<?php if (!empty($member['avatar_url'])): ?> style="background-image: url('<?= e($member['avatar_url']) ?>')"<?php endif; ?>>
+                            <?php if (empty($member['avatar_url'])): ?>
+                                <div class="disc-initials"><?= e(getInitials($member['display_name'])) ?></div>
+                            <?php endif; ?>
+                            <div class="disc-label">
+                                <strong><?= e($member['username']) ?></strong>
+                                <span>ICS · <?= e(strtoupper($member['role'])) ?></span>
+                            </div>
                         </div>
-                        <span class="post-badge badge-<?= $member['role'] ?>" style="margin-top: 4px;">
-                            <?= $member['role'] ?>
-                        </span>
+                        <div class="disc-hub"></div>
                     </div>
                 </div>
-                <?php if ($member['bio']): ?>
-                    <div class="text-muted mt-md" style="font-size: 0.8125rem; line-height: 1.5;">
-                        <?= e(mb_substr($member['bio'], 0, 120)) ?><?= mb_strlen($member['bio']) > 120 ? '...' : '' ?>
-                    </div>
-                <?php endif; ?>
             </a>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
+        <div class="disc-cta" aria-hidden="true">CLIQUER POUR OUVRIR LE PROFIL</div>
     </div>
-</div>
+
+    <nav class="discs-strip" aria-label="Index des membres">
+        <button type="button" class="discs-arrow" data-disc-prev aria-label="Membre précédent">←</button>
+        <?php foreach ($members as $i => $member): ?>
+            <button type="button" class="discs-thumb" data-disc-thumb="<?= $i ?>" aria-label="<?= e($member['display_name']) ?>">
+                <?php if (!empty($member['avatar_url'])): ?>
+                    <img src="<?= e($member['avatar_url']) ?>" alt="">
+                <?php else: ?>
+                    <?= e(getInitials($member['display_name'])) ?>
+                <?php endif; ?>
+            </button>
+        <?php endforeach; ?>
+        <button type="button" class="discs-arrow" data-disc-next aria-label="Membre suivant">→</button>
+    </nav>
+    <p class="discs-hint">Molette, glisser ou flèches du clavier pour parcourir les disques.</p>
+</section>
 
 <?php include __DIR__ . '/partials/footer.php'; ?>

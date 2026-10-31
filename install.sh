@@ -43,7 +43,6 @@ INSTALL_DIR="/var/www/ics-community"
 DB_NAME="ics_community"
 DB_USER="ics_user"
 DB_PASS="$(openssl rand -base64 18 | tr -dc 'A-Za-z0-9' | head -c 24)"
-DB_ROOT_PASS="$(openssl rand -base64 18 | tr -dc 'A-Za-z0-9' | head -c 24)"
 APP_SECRET="$(openssl rand -hex 32)"
 UPLOAD_DIR="/var/www/ics-storage/uploads"
 MAILPIT_VERSION="v1.21.0"
@@ -89,11 +88,29 @@ step "3/7 — Configuration de la base de données"
 systemctl start mysql
 systemctl enable mysql
 
-# Créer la base et l'utilisateur
+# Accès root MySQL : on garde l'authentification par socket d'Ubuntu (sudo mysql),
+# on ne pose JAMAIS de mot de passe root (c'est ce qui bloquait les réinstallations).
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if ! mysql -u root -e "SELECT 1" >/dev/null 2>&1; then
+    # Ancienne installation : root a un mot de passe dans credentials.txt → on remet l'auth socket
+    OLD_ROOT_PASS=""
+    if [[ -f "${SCRIPT_DIR}/credentials.txt" ]]; then
+        OLD_ROOT_PASS="$(grep '^MySQL Root:' "${SCRIPT_DIR}/credentials.txt" | sed 's#.*root / ##' | tr -d '[:space:]')"
+    fi
+    if [[ -n "${OLD_ROOT_PASS}" ]] && MYSQL_PWD="${OLD_ROOT_PASS}" mysql -u root -e "SELECT 1" >/dev/null 2>&1; then
+        MYSQL_PWD="${OLD_ROOT_PASS}" mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH auth_socket; FLUSH PRIVILEGES;"
+        info "Accès root MySQL rétabli (authentification par socket)"
+    else
+        error "Impossible de se connecter à MySQL en root. Purgez MySQL puis relancez : sudo apt-get purge -y 'mysql-*' && sudo rm -rf /var/lib/mysql /etc/mysql && sudo bash install.sh"
+    fi
+fi
+
+# (Re)créer la base et l'utilisateur applicatif — idempotent
 mysql -u root <<EOSQL
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${DB_ROOT_PASS}';
-CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';
+DROP DATABASE IF EXISTS \`${DB_NAME}\`;
+CREATE DATABASE \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+DROP USER IF EXISTS '${DB_USER}'@'localhost';
+CREATE USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';
 GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'localhost';
 FLUSH PRIVILEGES;
 EOSQL
@@ -105,13 +122,15 @@ info "Utilisateur '${DB_USER}' configuré"
 step "4/7 — Déploiement de l'application"
 
 # Copier les fichiers
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 rm -rf "${INSTALL_DIR}"
 mkdir -p "${INSTALL_DIR}"
 cp -r "${SCRIPT_DIR}/app/"* "${INSTALL_DIR}/"
 cp -f "${SCRIPT_DIR}/reset-lab.sh" "${INSTALL_DIR}/reset-lab.sh"
 cp -r "${SCRIPT_DIR}/database" "${INSTALL_DIR}/database"
 chmod +x "${INSTALL_DIR}/reset-lab.sh"
+# Version déployée (affichée en bas de chaque page : « build xxxxxxx »)
+BUILD="$(git -c safe.directory="${SCRIPT_DIR}" -C "${SCRIPT_DIR}" rev-parse --short HEAD 2>/dev/null || echo local)"
+echo "${BUILD} $(date '+%Y-%m-%d %H:%M')" > "${INSTALL_DIR}/VERSION"
 
 # Créer le répertoire d'uploads (hors webroot)
 mkdir -p "${UPLOAD_DIR}"
@@ -150,8 +169,8 @@ chmod 600 "${INSTALL_DIR}/.env"
 info "Application déployée dans ${INSTALL_DIR}"
 
 # Importer le schéma et les données
-mysql -u "${DB_USER}" -p"${DB_PASS}" "${DB_NAME}" < "${SCRIPT_DIR}/database/schema.sql"
-mysql -u "${DB_USER}" -p"${DB_PASS}" "${DB_NAME}" < "${SCRIPT_DIR}/database/seed.sql"
+MYSQL_PWD="${DB_PASS}" mysql -u "${DB_USER}" "${DB_NAME}" < "${SCRIPT_DIR}/database/schema.sql"
+MYSQL_PWD="${DB_PASS}" mysql -u "${DB_USER}" "${DB_NAME}" < "${SCRIPT_DIR}/database/seed.sql"
 info "Schéma et données seed importés"
 
 # ── 5. Configuration Apache ──────────────────────────────────────
@@ -265,6 +284,7 @@ echo -e "${CYAN}╔════════════════════�
 echo -e "${CYAN}║${NC}           ${GREEN}Installation terminée !${NC}                 ${CYAN}║${NC}"
 echo -e "${CYAN}╚══════════════════════════════════════════════════╝${NC}"
 echo ""
+echo -e "  ${GREEN}Build :${NC}        ${BUILD}"
 echo -e "  ${GREEN}Application :${NC}  http://localhost"
 echo -e "  ${GREEN}Mailpit :${NC}      http://localhost:8025"
 echo -e "  ${GREEN}CVE Lab :${NC}      http://localhost:8081 (si Docker)"
@@ -280,7 +300,7 @@ cat > "${CRED_FILE}" <<CREDS
 # ICS Community — Credentials (généré le $(date))
 # NE PAS COMMITER CE FICHIER
 
-MySQL Root:     root / ${DB_ROOT_PASS}
+MySQL Root:     authentification par socket (sudo mysql)
 MySQL App:      ${DB_USER} / ${DB_PASS}
 App Secret:     ${APP_SECRET}
 Install Dir:    ${INSTALL_DIR}

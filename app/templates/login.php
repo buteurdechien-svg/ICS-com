@@ -49,7 +49,7 @@ include __DIR__ . '/partials/header.php';
         </div>
 
         <!-- VULN INFO: aide pour les pentesters -->
-        <!-- Comptes de test: tous les emails @ics-lab.ci, mot de passe: Password123! -->
+        <!-- Comptes de test: emails au format <pseudo>@ics-lab.ci (voir la page Membres) -->
     </div>
 </div>
 

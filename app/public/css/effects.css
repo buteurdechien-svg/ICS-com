@@ -1,0 +1,331 @@
+/* ============================================================
+   ICS Community — Effets visuels
+   Lumière qui suit la souris, grille révélée, constellation,
+   curseur, cartes éclairées, boutons, révélations au scroll
+   ============================================================ */
+
+/* Le contenu passe au-dessus des calques d'ambiance */
+.hero, .page-content, .footer, .auth-container, .discs-page {
+  position: relative;
+  z-index: 2;
+}
+
+/* --- Calque 1 : constellation (canvas) --- */
+.fx-constellation {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .75;
+}
+
+/* --- Calque 2 : grille cyber révélée autour du curseur ---
+   Élément de taille fixe déplacé par transform (GPU) ; la grille reste
+   alignée sur l'écran grâce au background-position mis à jour en JS. */
+.fx-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 560px;
+  height: 560px;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform;
+  transform: translate3d(-9999px, 0, 0);
+  background-image:
+    linear-gradient(rgba(47, 129, 247, .38) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 129, 247, .38) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 0%, rgba(0,0,0,.35) 45%, transparent 100%);
+          mask-image: radial-gradient(circle closest-side, #000 0%, rgba(0,0,0,.35) 45%, transparent 100%);
+  transition: opacity .4s ease;
+}
+
+/* --- Calque 3 : projecteur qui éclaire la page (déplacé par transform) --- */
+.fx-spotlight {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1100px;
+  height: 1100px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 50;
+  will-change: transform;
+  transform: translate3d(-9999px, 0, 0);
+  background:
+    radial-gradient(circle 110px at center, rgba(120, 180, 255, .2), transparent 70%),
+    radial-gradient(circle 520px at center, rgba(47, 129, 247, .15), rgba(137, 87, 229, .07) 45%, transparent 75%);
+  transition: opacity .4s ease;
+}
+body.fx-pointer-out .fx-spotlight,
+body.fx-pointer-out .fx-grid { opacity: 0; }
+
+/* --- Curseur : point + anneau qui suit avec inertie --- */
+.fx-cursor-dot, .fx-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10000;
+  border-radius: 50%;
+  will-change: transform;
+}
+.fx-cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: #fff;
+  box-shadow: 0 0 10px var(--electric), 0 0 20px var(--electric);
+}
+.fx-cursor-ring {
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  border: 1.5px solid rgba(47, 129, 247, .8);
+  box-shadow: 0 0 14px rgba(47, 129, 247, .45), inset 0 0 10px rgba(137, 87, 229, .35);
+  transition: width .25s ease, height .25s ease, margin .25s ease, border-color .25s ease, background .25s ease;
+}
+body.fx-hovering .fx-cursor-ring {
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border-color: rgba(137, 87, 229, .95);
+  background: rgba(137, 87, 229, .08);
+}
+body.fx-pressing .fx-cursor-ring {
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+}
+body.fx-pointer-out .fx-cursor-dot,
+body.fx-pointer-out .fx-cursor-ring { opacity: 0; }
+@media (hover: none), (pointer: coarse) {
+  .fx-cursor-dot, .fx-cursor-ring { display: none; }
+}
+
+/* --- Cartes : halo + bordure lumineuse qui suivent la souris --- */
+.card, .post-card, .sidebar-widget, .auth-card, .profile-header, .donation-method {
+  position: relative;
+  isolation: isolate;
+}
+.card::before, .post-card::before, .sidebar-widget::before, .auth-card::before, .profile-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity .35s ease;
+  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), rgba(47, 129, 247, .16), rgba(137, 87, 229, .07) 40%, transparent 70%);
+}
+.card::after, .post-card::after, .sidebar-widget::after, .auth-card::after, .profile-header::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .35s ease;
+  background: radial-gradient(260px circle at var(--gx, 50%) var(--gy, 50%), rgba(88, 166, 255, .95), rgba(137, 87, 229, .6) 40%, transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+.card:hover::before, .post-card:hover::before, .sidebar-widget:hover::before, .auth-card:hover::before, .profile-header:hover::before,
+.card:hover::after, .post-card:hover::after, .sidebar-widget:hover::after, .auth-card:hover::after, .profile-header:hover::after {
+  opacity: 1;
+}
+
+/* Inclinaison 3D légère */
+[data-tilt] {
+  transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.16, 1, .3, 1), box-shadow .4s ease;
+  will-change: transform;
+}
+[data-tilt].is-tilting {
+  transition: transform .08s linear, box-shadow .4s ease;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .45), 0 0 30px rgba(47, 129, 247, .12);
+}
+
+/* --- Boutons : reflet qui balaye + onde au clic --- */
+.btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 40%;
+  transform: skewX(-20deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .35), transparent);
+  pointer-events: none;
+  transition: left .6s ease;
+}
+.btn:hover::after { left: 130%; }
+.btn-primary:hover, .btn-iris:hover {
+  box-shadow: 0 0 22px rgba(47, 129, 247, .55), 0 0 44px rgba(137, 87, 229, .25);
+}
+.fx-ripple {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .45);
+  pointer-events: none;
+  animation: fxRipple .65s ease-out forwards;
+}
+@keyframes fxRipple {
+  to { transform: scale(34); opacity: 0; }
+}
+
+/* --- Révélation au scroll --- */
+.fx-reveal {
+  opacity: 0;
+  transform: translateY(28px) scale(.98);
+  filter: blur(6px);
+  transition: opacity .7s cubic-bezier(.16, 1, .3, 1), transform .7s cubic-bezier(.16, 1, .3, 1), filter .7s ease;
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.fx-reveal.fx-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* --- Titres : texte dégradé animé --- */
+.hero h1, .fx-gradient-text {
+  background-size: 220% 100%;
+  animation: fxGradientShift 6s ease-in-out infinite;
+  filter: drop-shadow(0 0 22px rgba(47, 129, 247, .35));
+}
+@keyframes fxGradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* --- Navigation --- */
+.nav {
+  background: rgba(22, 27, 34, .82);
+  -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
+}
+.nav-links a { position: relative; }
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--electric), var(--iris));
+  box-shadow: 0 0 10px rgba(47, 129, 247, .7);
+  transform: scaleX(0);
+  transition: transform .3s cubic-bezier(.16, 1, .3, 1);
+}
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+.nav-brand:hover .nav-logo { animation: fxLogoGlitch .45s steps(3) 1; }
+@keyframes fxLogoGlitch {
+  0% { transform: translate(0); filter: none; }
+  33% { transform: translate(-2px, 1px); filter: drop-shadow(2px 0 var(--signal)) drop-shadow(-2px 0 var(--electric)); }
+  66% { transform: translate(2px, -1px); filter: drop-shadow(-2px 0 var(--phosphor)) drop-shadow(2px 0 var(--iris)); }
+  100% { transform: translate(0); filter: none; }
+}
+
+/* --- Bannière labo : balayage lumineux --- */
+.lab-banner { overflow: hidden; }
+.lab-banner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 160px;
+  left: -160px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .25), transparent);
+  animation: fxBannerSweep 5s ease-in-out infinite;
+}
+@keyframes fxBannerSweep {
+  0% { left: -160px; }
+  60%, 100% { left: 100%; }
+}
+
+/* --- Barre de dons --- */
+.donation-progress-bar {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 14px rgba(47, 129, 247, .5);
+}
+.donation-progress-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .45), transparent);
+  transform: translateX(-100%);
+  animation: fxBarShine 2.4s ease-in-out infinite;
+}
+@keyframes fxBarShine {
+  to { transform: translateX(100%); }
+}
+.donation-method {
+  transition: transform .25s cubic-bezier(.16, 1, .3, 1), box-shadow .3s ease, border-color .3s ease;
+}
+.donation-method:hover {
+  transform: translateY(-4px) scale(1.04);
+  border-color: var(--iris);
+  box-shadow: 0 10px 26px rgba(137, 87, 229, .25);
+}
+.donation-method.selected {
+  border-color: var(--phosphor);
+  box-shadow: 0 0 0 1px var(--phosphor), 0 0 24px rgba(63, 185, 80, .35);
+}
+
+/* --- Champs de formulaire --- */
+.form-input, .form-textarea, .form-select {
+  transition: border-color .2s ease, box-shadow .3s ease;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--electric);
+  box-shadow: 0 0 0 3px rgba(47, 129, 247, .2), 0 0 24px rgba(47, 129, 247, .18);
+}
+
+/* --- Avatars : anneau lumineux au survol --- */
+.post-avatar, .member-list-avatar, .nav-avatar {
+  transition: box-shadow .3s ease, transform .3s ease;
+}
+.post-avatar:hover, .member-list-avatar:hover, .nav-avatar:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 2px var(--electric), 0 0 18px rgba(47, 129, 247, .6);
+}
+
+/* --- Transition de page --- */
+body { animation: fxPageIn .5s ease both; }
+body.fx-leaving { opacity: 0; transition: opacity .2s ease; }
+@keyframes fxPageIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Réduction des animations : on garde la lumière et les interactions,
+   on coupe seulement les boucles automatiques */
+@media (prefers-reduced-motion: reduce) {
+  .lab-banner::after, .donation-progress-bar::after { animation: none; }
+  .hero h1, .fx-gradient-text { animation: none; }
+}
+
+/* --- Petits écrans : barre de navigation compacte --- */
+@media (max-width: 640px) {
+  .nav { top: 0; }
+  .nav-brand-text { display: none; }
+  .lab-banner { position: relative; font-size: .625rem; }
+  .nav-user { gap: var(--space-sm); }
+}

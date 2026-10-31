@@ -53,7 +53,7 @@ GET /api/debug/session
 ```
 POST /register
 username=admin&email=test@test.com → "Ce nom d'utilisateur est déjà pris"
-username=test123&email=ahize@ics.ci → "Cet email est déjà utilisé"
+username=test123&email=volkoff@ics-lab.ci → "Cet email est déjà utilisé"
 ```
 
 **Impact :** Un attaquant peut vérifier si un email ou un username existe dans la base.
@@ -71,11 +71,11 @@ username=test123&email=ahize@ics.ci → "Cet email est déjà utilisé"
 # Avec Burp Intruder ou hydra
 for pass in $(cat wordlist.txt); do
   curl -X POST http://localhost:8080/login \
-    -d "username=m.ahize&password=$pass"
+    -d "email=volkoff@ics-lab.ci&password=$pass"
 done
 ```
 
-**Mot de passe par défaut :** `Password123!` (tous les comptes seedés)
+**Mots de passe :** uniques par compte, non publiés (objectif : les retrouver par brute force sur une wordlist).
 
 ---
 
@@ -320,13 +320,22 @@ if ($data->password == $storedHash) { // Comparaison lâche !
 
 ## Comptes de test
 
-| Utilisateur | Email | Mot de passe | Rôle |
-|-------------|-------|-------------|------|
-| m.ahize | ahize@ics.ci | Password123! | president |
-| k.kouadio | kouadio@ics.ci | Password123! | administrateur |
-| s.traore | traore@ics.ci | Password123! | moderateur |
-| a.coulibaly | coulibaly@ics.ci | Password123! | membre |
-| (10 autres) | ... | Password123! | membre |
+Chaque compte a un mot de passe unique. Les mots de passe ne sont pas publiés dans le dépôt : ils sont fournis au formateur séparément.
+
+| Pseudo | Email | Rôle |
+|--------|-------|------|
+| thesocvolkoff | volkoff@ics-lab.ci | president |
+| massambacyberhack | massamba@ics-lab.ci | administrateur |
+| camson | camson@ics-lab.ci | moderateur |
+| mrshadow | shadow@ics-lab.ci | moderateur |
+| legoatdeshacker | goathacker@ics-lab.ci | moderateur |
+| victoriait | victoria@ics-lab.ci | moderateur |
+| hassancamara | hassan@ics-lab.ci | membre |
+| tehuayann | tehua@ics-lab.ci | membre |
+| hackerman | hackerman@ics-lab.ci | membre |
+| ahizimarc | ahizi@ics-lab.ci | membre |
+| gnalyemmanuel | gnaly@ics-lab.ci | membre |
+| dombamohamed | domba@ics-lab.ci | membre |
 
 ---
 

@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($pageTitle ?? 'ICS Community') ?> — ICS Community</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="<?= asset('/css/style.css') ?>">
+    <link rel="stylesheet" href="<?= asset('/css/effects.css') ?>">
+    <?php foreach (($extraCss ?? []) as $css): ?>
+    <link rel="stylesheet" href="<?= asset($css) ?>">
+    <?php endforeach; ?>
 </head>
 <body>
 
@@ -17,8 +21,8 @@
 <nav class="nav">
     <div class="nav-inner">
         <a href="/" class="nav-brand">
-            <img src="/img/logo-ics.png" alt="ICS" class="nav-logo">
-            ICS Community
+            <img src="<?= asset('/img/logo-ics.png') ?>" alt="Ivoire Cyber Shield" class="nav-logo">
+            <span class="nav-brand-text">ICS Community</span>
         </a>
 
         <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
