@@ -37,21 +37,18 @@ $postCount = count($userPosts);
     <!-- En-tête profil -->
     <div class="profile-header animate-in">
         <div class="profile-top">
-            <div class="profile-disc" role="img" aria-label="Disque de <?= e($profile['display_name']) ?>">
-                <div class="disc">
-                    <div class="disc-shadow"></div>
-                    <div class="disc-body">
-                        <div class="disc-edge"></div><div class="disc-edge"></div>
-                        <div class="disc-face"<?php if (!empty($profile['avatar_url'])): ?> style="background-image: url('<?= e($profile['avatar_url']) ?>')"<?php endif; ?>>
-                            <?php if (empty($profile['avatar_url'])): ?>
-                                <div class="disc-initials"><?= e(getInitials($profile['display_name'])) ?></div>
-                            <?php endif; ?>
-                            <div class="disc-label">
-                                <strong><?= e($profile['username']) ?></strong>
-                                <span>ICS · <?= e(strtoupper($profile['role'])) ?></span>
-                            </div>
-                        </div>
-                        <div class="disc-hub"></div>
+            <div class="profile-planet" role="img" aria-label="Planète de <?= e($profile['display_name']) ?>">
+                <div class="planet">
+                    <div class="planet-atmo"></div>
+                    <div class="planet-surface"<?php if (!empty($profile['avatar_url'])): ?> style="background-image: url('<?= e($profile['avatar_url']) ?>')"<?php endif; ?>>
+                        <?php if (empty($profile['avatar_url'])): ?>
+                            <div class="planet-initials"><?= e(getInitials($profile['display_name'])) ?></div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="planet-shade"></div>
+                    <div class="planet-label">
+                        <strong><?= e($profile['username']) ?></strong>
+                        <span>ICS · <?= e(strtoupper($profile['role'])) ?></span>
                     </div>
                 </div>
             </div>

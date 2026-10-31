@@ -41,20 +41,18 @@ $total = count($members);
                data-city="<?= e($member['city'] ?: '—') ?>"
                data-since="<?= e($mois) ?>"
                aria-label="Voir le profil de <?= e($member['display_name']) ?>">
-                <div class="disc">
-                    <div class="disc-shadow"></div>
-                    <div class="disc-body">
-                        <div class="disc-edge"></div><div class="disc-edge"></div>
-                        <div class="disc-face"<?php if (!empty($member['avatar_url'])): ?> style="background-image: url('<?= e($member['avatar_url']) ?>')"<?php endif; ?>>
-                            <?php if (empty($member['avatar_url'])): ?>
-                                <div class="disc-initials"><?= e(getInitials($member['display_name'])) ?></div>
-                            <?php endif; ?>
-                            <div class="disc-label">
-                                <strong><?= e($member['username']) ?></strong>
-                                <span>ICS · <?= e(strtoupper($member['role'])) ?></span>
-                            </div>
-                        </div>
-                        <div class="disc-hub"></div>
+                <div class="planet">
+                    <div class="planet-atmo"></div>
+                    <div class="planet-surface"<?php if (!empty($member['avatar_url'])): ?> style="background-image: url('<?= e($member['avatar_url']) ?>')"<?php endif; ?>>
+                        <?php if (empty($member['avatar_url'])): ?>
+                            <div class="planet-initials"><?= e(getInitials($member['display_name'])) ?></div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="planet-shade"></div>
+                    <div class="planet-dim"></div>
+                    <div class="planet-label">
+                        <strong><?= e($member['username']) ?></strong>
+                        <span>ICS · <?= e(strtoupper($member['role'])) ?></span>
                     </div>
                 </div>
             </a>
@@ -76,7 +74,7 @@ $total = count($members);
         <?php endforeach; ?>
         <button type="button" class="discs-arrow" data-disc-next aria-label="Membre suivant">→</button>
     </nav>
-    <p class="discs-hint">Molette, glisser ou flèches du clavier pour parcourir les disques.</p>
+    <p class="discs-hint">Molette, glisser ou flèches du clavier pour parcourir les planètes.</p>
 </section>
 
 <?php include __DIR__ . '/partials/footer.php'; ?>

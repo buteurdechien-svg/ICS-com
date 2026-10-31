@@ -1,150 +1,138 @@
 /* ============================================================
-   ICS Community — Disques membres (inspiré du carrousel A24)
-   Chaque membre est un disque : photo imprimée, trou central,
-   anneau transparent, reflet irisé qui suit la souris,
-   épaisseur 3D, rotation continue.
+   ICS Community — Planètes membres
+   Chaque membre est une planète : photo sur une sphère, ombrage
+   et reflet orientés vers la souris (la souris est le soleil),
+   atmosphère lumineuse, léger parallaxe de la surface.
    ============================================================ */
 
-/* --- Le disque --- */
-.disc {
+.planet {
   --size: 320px;
-  --sheen: 0deg;
+  --lx: 35%;     /* position de la lumière (suivie par la souris) */
+  --ly: 30%;
+  --px: 0%;      /* parallaxe de la surface */
+  --py: 0%;
   position: relative;
   width: var(--size);
   height: var(--size);
-  transform-style: preserve-3d;
-}
-.disc-body {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  transform: rotateZ(var(--spin, 0deg));
-}
-/* tranche du disque (épaisseur) */
-.disc-edge {
-  position: absolute;
-  inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle, transparent 0 9.5%, #9aa3ad 10%, #c9d0d8 60%, #8f98a3 100%);
-  -webkit-mask: radial-gradient(circle, transparent 0 9.5%, #000 10%);
-          mask: radial-gradient(circle, transparent 0 9.5%, #000 10%);
+  transition: transform .6s cubic-bezier(.16, 1, .3, 1);
 }
-.disc-edge:nth-child(1) { transform: translateZ(-2px); }
-.disc-edge:nth-child(2) { transform: translateZ(-4px); background: radial-gradient(circle, transparent 0 9.5%, #6d757e 10%, #8c949d 100%); }
-
-/* face imprimée */
-.disc-face {
+/* atmosphère : halo bleu/violet autour de la sphère */
+.planet-atmo {
+  position: absolute;
+  inset: -7%;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: .85;
+  background: radial-gradient(circle closest-side,
+    transparent 0 84%,
+    rgba(120, 190, 255, .6) 89%,
+    rgba(88, 140, 255, .22) 93%,
+    rgba(137, 87, 229, .08) 97%,
+    transparent 100%);
+  transition: opacity .5s ease, transform .6s cubic-bezier(.16, 1, .3, 1);
+}
+/* surface : la photo du membre */
+.planet-surface {
   position: absolute;
   inset: 0;
   border-radius: 50%;
   overflow: hidden;
   background-color: #1c2128;
-  background-size: cover;
-  background-position: center 30%;
-  box-shadow: inset 0 0 0 calc(var(--size) * .012) rgba(230, 235, 240, .9),
-              inset 0 0 0 calc(var(--size) * .022) rgba(160, 170, 180, .55),
-              inset 0 0 calc(var(--size) * .12) rgba(0, 0, 0, .45);
-  -webkit-mask: radial-gradient(circle, transparent 0 9.5%, #000 10%);
-          mask: radial-gradient(circle, transparent 0 9.5%, #000 10%);
+  background-size: 116%;
+  background-repeat: no-repeat;
+  background-position: calc(50% + var(--px)) calc(32% + var(--py));
+  box-shadow:
+    0 0 calc(var(--size) * .1) rgba(47, 129, 247, .35),
+    0 0 calc(var(--size) * .28) rgba(137, 87, 229, .16);
 }
-.disc-initials {
+.planet-initials {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: calc(var(--size) * .2);
-  color: rgba(255, 255, 255, .9);
-  background: linear-gradient(135deg, var(--electric), var(--iris));
+  font-size: calc(var(--size) * .24);
+  color: rgba(255, 255, 255, .92);
+  background: radial-gradient(circle at 35% 30%, #4b8ff8, var(--electric) 40%, var(--iris) 100%);
 }
-/* voile pour lisibilité du texte imprimé */
-.disc-face::before {
-  content: '';
+/* ombrage sphérique : reflet côté lumière, nuit côté opposé, liseré lumineux */
+.planet-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 45%, rgba(5, 10, 20, .65) 92%);
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at var(--lx) var(--ly), rgba(255, 255, 255, .42) 0%, rgba(255, 255, 255, .14) 12%, transparent 30%),
+    radial-gradient(circle at var(--lx) var(--ly), transparent 34%, rgba(6, 10, 26, .38) 60%, rgba(2, 4, 14, .88) 100%);
+  box-shadow:
+    inset 0 0 calc(var(--size) * .035) rgba(170, 215, 255, .45),
+    inset 0 0 calc(var(--size) * .14) rgba(47, 129, 247, .18);
 }
-/* reflet irisé (angle piloté par la souris) */
-.disc-face::after {
-  content: '';
+/* voile pour les planètes en arrière-plan */
+.planet-dim {
   position: absolute;
   inset: 0;
-  mix-blend-mode: screen;
-  opacity: .85;
-  background: conic-gradient(from var(--sheen),
-    rgba(255, 255, 255, 0) 0deg,
-    rgba(255, 255, 255, .42) 18deg,
-    rgba(120, 200, 255, .18) 40deg,
-    rgba(255, 255, 255, 0) 70deg,
-    rgba(255, 160, 255, .22) 150deg,
-    rgba(255, 255, 255, 0) 180deg,
-    rgba(255, 255, 255, .38) 198deg,
-    rgba(160, 255, 210, .16) 222deg,
-    rgba(255, 255, 255, 0) 250deg,
-    rgba(255, 220, 140, .18) 320deg,
-    rgba(255, 255, 255, 0) 360deg);
+  border-radius: 50%;
+  background: #0d1117;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;   /* calque GPU : l'assombrissement ne repeint rien */
 }
-/* texte imprimé sur le disque */
-.disc-label {
+/* nom imprimé sur la planète */
+.planet-label {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 16%;
+  bottom: 15%;
   text-align: center;
   color: #fff;
   pointer-events: none;
-  z-index: 1;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, .6);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .75);
 }
-.disc-label strong {
+.planet-label strong {
   display: block;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: calc(var(--size) * .085);
+  font-size: calc(var(--size) * .08);
   letter-spacing: -.01em;
   line-height: 1;
 }
-.disc-label span {
+.planet-label span {
   display: block;
   margin-top: calc(var(--size) * .02);
   font-family: var(--font-mono);
-  font-size: calc(var(--size) * .035);
+  font-size: calc(var(--size) * .033);
   letter-spacing: .12em;
   color: rgba(200, 225, 255, .9);
 }
-/* moyeu transparent */
-.disc-hub {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 34%;
-  height: 34%;
-  transform: translate(-50%, -50%) translateZ(.5px);
+
+/* zoom plein écran vers le profil (élément créé en JS) */
+.planet-warp {
+  position: fixed;
   border-radius: 50%;
-  background: radial-gradient(circle,
-    transparent 0 27.5%,
-    rgba(255, 255, 255, .75) 29%,
-    rgba(210, 216, 222, .55) 34%,
-    rgba(255, 255, 255, .25) 50%,
-    rgba(190, 198, 206, .55) 62%,
-    rgba(255, 255, 255, .7) 64%,
-    rgba(150, 160, 170, .35) 66%,
-    rgba(255, 255, 255, .12) 100%);
-  -webkit-mask: radial-gradient(circle, transparent 0 28%, #000 29%);
-          mask: radial-gradient(circle, transparent 0 28%, #000 29%);
-}
-/* ombre portée */
-.disc-shadow {
-  position: absolute;
-  left: 10%;
-  right: 10%;
-  bottom: -14%;
-  height: 16%;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(0, 0, 0, .5), rgba(0, 0, 0, .2) 45%, transparent 70%);
-  transform: translateZ(-40px);
   pointer-events: none;
+  z-index: 9000;
+  background-size: 116%;
+  background-position: center 32%;
+  will-change: transform;
+  overflow: hidden;
+}
+.planet-warp::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(13, 17, 23, .25) 0%, #0d1117 70%);
+  opacity: 0;
+  animation: warpDark .75s cubic-bezier(.7, 0, .2, 1) forwards;
+}
+@keyframes warpDark {
+  0% { opacity: 0; }
+  30% { opacity: .55; }
+  70% { opacity: .92; }
+  to { opacity: 1; }
 }
 
 /* ============================================================
@@ -219,8 +207,6 @@
 .discs-stage {
   position: relative;
   min-height: 460px;
-  perspective: 1400px;
-  perspective-origin: 50% 40%;
   cursor: grab;
   touch-action: pan-y;
 }
@@ -228,8 +214,7 @@
 .discs-track {
   position: absolute;
   inset: 0;
-  transform-style: preserve-3d;
-  pointer-events: none;   /* sinon ce calque 3D transparent capte les clics devant les disques */
+  pointer-events: none;   /* seuls les planètes reçoivent les clics */
 }
 .disc-slot {
   position: absolute;
@@ -238,8 +223,8 @@
   width: var(--slot);
   height: var(--slot);
   margin: calc(var(--slot) / -2) 0 0 calc(var(--slot) / -2);
-  transform-style: preserve-3d;
   will-change: transform, opacity;
+  border-radius: 50%;
   border: 0;
   padding: 0;
   background: none;
@@ -248,14 +233,11 @@
   pointer-events: auto;
 }
 .disc-slot:focus-visible { outline: none; }
-.disc-slot:focus-visible .disc-face { box-shadow: 0 0 0 4px var(--electric); }
-.disc-slot .disc {
-  --size: var(--slot);
-  transform: rotateX(var(--tx, 32deg)) rotateY(var(--ty, -18deg)) rotateZ(-14deg);
-  transform-style: preserve-3d;
-  transition: transform .5s cubic-bezier(.16, 1, .3, 1);
-}
-.disc-slot.is-current .disc { transition: none; }
+.disc-slot:focus-visible .planet-surface { outline: 3px solid var(--electric); outline-offset: 6px; }
+.disc-slot .planet { --size: var(--slot); }
+.disc-slot.is-current:hover .planet,
+.disc-slot.is-current:focus-visible .planet { transform: scale(1.045); }
+.disc-slot.is-current:hover .planet-atmo { opacity: 1; transform: scale(1.06); }
 
 /* cercle tracé à la main au survol */
 .disc-scribble {
@@ -295,16 +277,21 @@
 }
 .discs-stage.is-hovering-current .disc-cta { color: var(--electric); }
 
-/* lancement vers le profil */
-.disc-slot.is-launching .disc {
-  transition: transform .7s cubic-bezier(.7, 0, .3, 1);
-  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1.25);
-}
+/* lancement vers le profil : la planète grossit jusqu'à remplir l'écran (voir .planet-warp) */
 .discs-page.is-launching .discs-info,
 .discs-page.is-launching .discs-strip,
 .discs-page.is-launching .disc-slot:not(.is-launching) {
   opacity: 0;
-  transition: opacity .4s ease;
+  transition: opacity .35s ease;
+}
+.discs-page.is-launching .disc-scribble,
+.discs-page.is-launching .disc-cta { opacity: 0; transition: opacity .2s ease; }
+
+/* fondu des informations quand le membre change */
+.discs-meta dd, .discs-counter b { display: inline-block; }
+@keyframes infoSwap {
+  from { opacity: 0; transform: translateY(8px); filter: blur(3px); }
+  to { opacity: 1; transform: none; filter: none; }
 }
 
 /* index miniature */
@@ -338,7 +325,7 @@
   background: var(--bg-elevated);
   cursor: pointer;
   opacity: .5;
-  transition: opacity .25s ease, transform .25s ease, border-color .25s ease;
+  transition: opacity .35s ease, transform .45s cubic-bezier(.16, 1, .3, 1), border-color .35s ease, box-shadow .35s ease;
   font-size: .625rem;
   color: #fff;
   font-weight: 700;
@@ -407,23 +394,26 @@
 }
 
 /* ============================================================
-   Page profil — disque du membre
+   Page profil — planète du membre
    ============================================================ */
-.profile-disc {
-  --slot: 180px;
+.profile-planet {
+  --slot: 170px;
   width: var(--slot);
   height: var(--slot);
   flex-shrink: 0;
-  perspective: 900px;
-  margin: -10px 10px;
+  margin: 0 12px;
 }
-.profile-disc .disc {
-  --size: var(--slot);
-  transform: rotateX(var(--tx, 24deg)) rotateY(var(--ty, -16deg)) rotateZ(-12deg);
-  transition: transform .2s ease-out;
+.profile-planet .planet { --size: var(--slot); }
+.profile-planet:hover .planet { transform: scale(1.05); }
+.profile-planet:hover .planet-atmo { opacity: 1; transform: scale(1.06); }
+.profile-planet .planet-label strong { font-size: calc(var(--size) * .1); }
+/* arrivée depuis la page Membres : la planète « atterrit » */
+.is-arriving .profile-planet .planet { animation: planetLand .9s cubic-bezier(.16, 1, .3, 1) both; }
+.is-arriving .profile-info { animation: infoSwap .8s .15s cubic-bezier(.16, 1, .3, 1) both; }
+@keyframes planetLand {
+  from { transform: scale(2.6); opacity: 0; filter: blur(6px); }
+  to { transform: none; opacity: 1; filter: none; }
 }
-.profile-disc .disc-label strong { font-size: calc(var(--size) * .1); }
 @media (max-width: 640px) {
-  .profile-disc { --slot: 160px; margin: 0 auto; }
+  .profile-planet { --slot: 150px; margin: 0 auto; }
 }
-

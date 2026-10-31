@@ -110,7 +110,7 @@ EOSQL
     done
     local PAGE
     PAGE="$(curl -s http://localhost/members || true)"
-    [[ "${PAGE}" == *data-disc-stage* ]] && ok "Page Membres : carrousel de disques présent" || { warn "Carrousel de disques absent de /members"; ERRORS=1; }
+    [[ "${PAGE}" == *data-disc-stage* ]] && ok "Page Membres : carrousel de planètes présent" || { warn "Carrousel de planètes absent de /members"; ERRORS=1; }
     PAGE="$(curl -s http://localhost/ || true)"
     [[ "${PAGE}" == *"build ${BUILD}"* ]] && ok "Le site affiche bien le build ${BUILD} (bas de page)" || { warn "Le bas de page n'affiche pas le build ${BUILD}"; ERRORS=1; }
 
