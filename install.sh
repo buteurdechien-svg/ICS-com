@@ -286,7 +286,7 @@ App Secret:     ${APP_SECRET}
 Install Dir:    ${INSTALL_DIR}
 Upload Dir:     ${UPLOAD_DIR}
 
-Comptes de test: Password123!
+Comptes membres: chaque compte a un mot de passe unique (voir email credentials)
 CREDS
 
 chmod 600 "${CRED_FILE}"

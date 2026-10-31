@@ -58,5 +58,5 @@ rm -f /var/lib/php/sessions/sess_* 2>/dev/null || true
 
 echo ""
 echo -e "${GREEN}[✓] Laboratoire réinitialisé avec succès !${NC}"
-echo -e "    Tous les comptes : mot de passe = ${GREEN}Password123!${NC}"
+echo -e "    Credentials : voir le fichier credentials envoyé par mail"
 echo ""
