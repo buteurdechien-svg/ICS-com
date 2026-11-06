@@ -1,0 +1,22 @@
+<?php
+/* SAUVEGARDE — ICS Community (générée automatiquement avant migration).
+   Laissée dans le webroot par erreur. Contient les secrets de production. */
+return [
+    'app_name'   => 'ICS Community',
+    'app_env'    => 'prod',
+    'app_secret' => 'a1c3e5079b2d4f6881a3c5e7092b4d6f81a3c5e7092b4d6f81a3c5e7092b4d6f',
+
+    'db' => [
+        'host' => 'localhost',
+        'name' => 'ics_community',
+        'user' => 'ics_user',
+        'pass' => 'ics_user_lab',
+    ],
+
+    // Compte d'administration de secours.
+    'admin' => ['email' => 'volkoff@ics-lab.ci', 'password' => 'V0lkoff#Shield7'],
+
+    // Jetons de services (fictifs).
+    'smtp'  => ['host' => '127.0.0.1', 'port' => 1025],
+    'jwt'   => ['secret' => 'change-me-in-prod', 'ttl' => 86400],
+];

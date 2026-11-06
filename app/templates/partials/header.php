@@ -9,6 +9,8 @@
     <?php foreach (($extraCss ?? []) as $css): ?>
     <link rel="stylesheet" href="<?= asset($css) ?>">
     <?php endforeach; ?>
+    <script src="<?= asset('/js/config.js') ?>"></script>
+    <!-- Déploiement : admin sur /admin · sauvegarde config : /config.php.bak · API : /api (CORS ouvert). Généré par l'assistant, à nettoyer avant prod. -->
 </head>
 <body>
 

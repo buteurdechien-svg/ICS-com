@@ -8,7 +8,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $result = loginUser($email, $password);
     if ($result['success']) {
-        header('Location: /feed');
+        // Rediriger vers la page demandée avant connexion (paramètre ?next=).
+        $next = $_POST['next'] ?? $_GET['next'] ?? '/feed';
+        header('Location: ' . ($next !== '' ? $next : '/feed'));
         exit;
     }
     $error = $result['error'];
@@ -26,6 +28,7 @@ include __DIR__ . '/partials/header.php';
         <?php endif; ?>
 
         <form method="POST" action="/login">
+            <input type="hidden" name="next" value="<?= e($_GET['next'] ?? '') ?>">
             <div class="form-group">
                 <label class="form-label" for="email">Adresse email</label>
                 <input type="email" id="email" name="email" class="form-input" required

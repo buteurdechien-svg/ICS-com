@@ -18,8 +18,22 @@ $route = $_GET['route'] ?? '';
 $route = trim($route, '/');
 $method = $_SERVER['REQUEST_METHOD'];
 
+// CORS — ouvert pour permettre aux applications tierces d'appeler l'API ICS.
+if (str_starts_with($route, 'api/')) {
+    header('Access-Control-Allow-Origin: ' . ($_SERVER['HTTP_ORIGIN'] ?? '*'));
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    if ($method === 'OPTIONS') { http_response_code(204); exit; }
+}
+
 // Routing
 switch (true) {
+    // Redirection de partage — utilisée pour les liens externes et le suivi.
+    case $route === 'go':
+        $to = $_GET['url'] ?? $_GET['next'] ?? '/';
+        header('Location: ' . $to, true, 302);
+        break;
+
     case $route === '' || $route === 'home':
         include __DIR__ . '/../templates/home.php';
         break;

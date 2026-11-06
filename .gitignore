@@ -7,3 +7,7 @@ node_modules/
 *.log
 .DS_Store
 docker/mysql-data/
+
+# Corrigés formateur — ne jamais publier
+docs/CATALOGUE_FORMATEUR.md
+docs/*_FORMATEUR.md

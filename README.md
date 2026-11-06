@@ -4,6 +4,15 @@
 
 Plateforme communautaire volontairement vulnérable pour la formation au pentest web. Développée par [Ivoire Cyber Shield](https://ivoirecybershield.ci).
 
+## Méthodologie — pentest web 100 % assisté par IA (sans Burp Suite)
+
+Ce laboratoire s'audite **sans proxy d'interception**, avec trois outils :
+- **le navigateur** (code source, DevTools : onglets *Réseau*, *Console*, *Cookies*, et modification d'un formulaire avant envoi) ;
+- **`curl`** (rejouer/forger des requêtes : en-têtes, `-I` pour les redirections et le CORS, cookies, méthodes) ;
+- **une IA** à qui l'on fait lire une page, un fichier JS ou une réponse HTTP pour repérer la faille et rédiger la preuve.
+
+Les failles vont du **plus simple** (secrets oubliés dans le code source, page de debug, sauvegarde `.bak` servie en clair, CORS ouvert, redirection ouverte) au **plus avancé** (contrôle d'accès, mass-assignment, élévation de rôle, SSRF, chaînage). Plusieurs imitent les erreurs typiques des sites **générés à l'IA par des « vibe-codeurs »**. Rien n'est affiché (pas de flag, pas de niveau) : le livrable est le **rapport d'audit**. Le corrigé détaillé est réservé au formateur et **n'est pas publié** dans ce dépôt.
+
 ## Stack technique
 
 - **Serveur :** Ubuntu Server 22.04 LTS
